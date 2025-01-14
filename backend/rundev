@@ -1,1 +1,1 @@
-FLASK_APP=app:server flask run --reload
+FLASK_APP=run:app FLASK_DEBUG=1 flask run --reload
