@@ -1,4 +1,4 @@
-import os
+import os, redis
 from pathlib import Path
 
 # Get directory of this file
@@ -20,3 +20,9 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', f'sqlite:///{dev_db}')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLACHEMY_ECHO = True
+    
+    SESSION_TYPE = 'redis'
+    SESSION_PERMANENT = False
+    SESSION_USE_SIGNER = True
+    SESSION_REDIS = redis.from_url("redis://redis:6379")
+

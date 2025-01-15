@@ -1,6 +1,6 @@
 from flask_smorest import Blueprint
 from flask_smorest.blueprint import MethodView
-from src.api.blueprints.movies.schemas import SearchMoviesParams, ListMovies, SortDirectionEnum
+from src.api.movies.schemas import SearchMoviesParams, ListMovies, SortDirectionEnum
 
 blp = Blueprint("movies", "movies", url_prefix="/movies", description="Movies API")
 

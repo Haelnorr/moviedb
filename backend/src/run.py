@@ -12,12 +12,13 @@ import sqlalchemy as sa
 import sqlalchemy.orm as so
 from src.api import db
 from src.api.models import User
-
+from src.api.auth import functions as af
 @app.shell_context_processor
 def make_shell_context():
     return {
         'sa': sa,
         'so': so,
         'db': db,
-        'User': User
+        'User': User,
+        'af': af
     }
