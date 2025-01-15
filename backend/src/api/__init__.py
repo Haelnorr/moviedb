@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_smorest import Api
-from backend.logger import get_logger
-from backend.api.config import Config
+from src.logger import get_logger
+from src.api.config import Config
 
 log = get_logger(__name__)
 
@@ -13,7 +13,7 @@ def create_app(config_class=Config):
 
     # do stuff here
 
-    from backend.api.blueprints.movies import bp as movies_bp
+    from src.api.blueprints.movies import bp as movies_bp
     api.register_blueprint(movies_bp)
 
     log.info("App created, returning object")
@@ -21,4 +21,4 @@ def create_app(config_class=Config):
     return app
 
 
-from backend.api import models
+from src.api import models

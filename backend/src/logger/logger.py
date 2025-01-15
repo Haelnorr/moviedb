@@ -7,7 +7,10 @@ from logging.handlers import TimedRotatingFileHandler
 # Get directory of this file
 path = os.path.dirname(os.path.abspath(__file__))
 # Go up to project root
-ROOT_DIR = Path(path).parent.absolute().parent.absolute()
+for _ in range(3):
+    path = Path(path).parent.absolute()
+DEFAULT_LOG_DIR = os.path.join(path, "logs")
+ 
 
 def get_level(level):
     return {
@@ -20,7 +23,7 @@ def get_level(level):
     }[level]
 
 class LogConfig():
-    log_dir = os.path.join(ROOT_DIR, "logs")
+    log_dir = os.getenv("LOG_DIR", DEFAULT_LOG_DIR)
     file_name = "backend-{:%%Y-%%m-%%d}.log"
     level = get_level(os.getenv("LOG_LEVEL", "info"))
     format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -45,3 +48,4 @@ def get_logger(logger_name):
     logger.addHandler(get_file_handler())
     logger.propagate = False
     return logger
+
