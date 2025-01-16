@@ -1,0 +1,28 @@
+.navbar {
+    background-color: var(--crust);
+}
+
+.navbrand {
+    font-size: 1.7em;
+}
+
+.navlink {
+    font-size: 1.4em;
+    margin-right: 10px;
+}
+
+.navbrand, .navlink {
+    color: var(--text);
+    padding-inline: 20px;
+    transition: all 0.35s ease-out;
+    text-decoration: none;
+}
+
+.navbrand:hover, .navlink:hover {
+    color: var(--green);
+    transition: all 0.35s ease-in;
+}
+
+.active {
+    color: var(--green);
+}
