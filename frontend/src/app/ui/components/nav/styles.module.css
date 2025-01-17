@@ -22,7 +22,3 @@
     color: var(--green);
     transition: all 0.35s ease-in;
 }
-
-.active {
-    color: var(--green);
-}
