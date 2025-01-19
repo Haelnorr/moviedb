@@ -1,8 +1,12 @@
-from flask import session
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, current_user
 from flask_smorest import Blueprint, abort
 from flask_smorest.blueprint import MethodView
-from src.api.auth.functions import check_username_exists, create_new_user, get_user, validate_username_format
-from src.api.auth.schemas import LoginUserParams, RegisterUserParams, UserDetails
+from src.api.auth.functions import JWT_AUTH_REQ, check_username_exists, create_new_user, get_user, validate_username_format
+from src.api.auth.schemas import LoginUserParams, RegisterUserParams, TokenResponse, UserDetails
+from src.api import jwt
+from src.logger.logger import get_logger
+
+log = get_logger(__name__)
 
 blp = Blueprint("auth", "auth", url_prefix="/auth", description="Auth API")
 
@@ -24,39 +28,35 @@ class Register(MethodView):
 
         create_new_user(username, password)
 
+@jwt.user_identity_loader
+def user_identity_lookup(user):
+    return f"{user["id"]}"
+
+@jwt.user_lookup_loader
+def user_lookup_callback(_jwt_header, jwt_data):
+    identity = jwt_data["sub"]
+    return get_user(id=identity)
+
 @blp.route("/login")
 class Login(MethodView):
     @blp.arguments(LoginUserParams, location="json")
-    @blp.response(status_code=201)
+    @blp.response(status_code=200, schema=TokenResponse)
     def post(self, parameters):
         username = parameters["username"]
         password = parameters["password"]
 
-        if not validate_username_format(username):
-            abort(400, message="Username contains invalid characters")
-
         user = get_user(username)
-        if not user:
+        if not user or not user.check_password(password):
             abort(401, message="Invalid credentials")
 
-        if not user.check_password(password):
-            abort(401, message="Invalid credentials")
+        access_token = create_access_token(user.json())
 
-        print(f'logged in as user {user.username}')
-        session["user_id"] = user.id
+        return { "access_token": access_token }
 
 @blp.route("/@me")
 class CheckCurrentUser(MethodView):
+    @blp.doc(**JWT_AUTH_REQ)
+    @jwt_required()
     @blp.response(status_code=200, schema=UserDetails)
-    def post(self):
-        user_id = session.get("user_id")
-        if not user_id:
-            abort(401, message="Not logged in")
-
-        user = get_user(id=user_id)
-        if not user:
-            abort(401, message="User does not exist")
-
-        print(f'logged in as {user.username}')
-        return user.json()
-
+    def get(self):
+        return current_user.json()

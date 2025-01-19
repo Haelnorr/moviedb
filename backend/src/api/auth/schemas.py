@@ -13,3 +13,6 @@ class LoginUserParams(Schema):
 class UserDetails(Schema):
     id = fields.Int()
     username = fields.Str()
+
+class TokenResponse(Schema):
+    access_token = fields.Str()
