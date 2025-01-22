@@ -35,4 +35,4 @@ def create_app(config_class=Config):
     return app
 
 
-from src.api import models
+from src.api import variables, models

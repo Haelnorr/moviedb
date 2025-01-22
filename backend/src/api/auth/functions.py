@@ -1,25 +1,12 @@
+from datetime import timedelta
 import sqlalchemy as sa
 from src.api import db
-from src.api.models import User
 import re
+from src.api.variables import USERNAME_REGEX_PATTERN
 from src.logger import get_logger
+from src.api.models import User
 
 log = get_logger(__name__)
-
-USERNAME_REGEX_PATTERN = "^[A-Za-z0-9_-]*$"
-
-JWT_AUTH_REQ = {
-    "parameters": [{
-        'name': 'Authorization',
-        'in': 'header',
-        'description': 'Authorization Bearer <access_token>',
-        'required': 'true',
-    }],
-    "security": [{"Bearer Auth": []}]
-}
-
-JWT_AUTH_OPT = JWT_AUTH_REQ
-JWT_AUTH_OPT["parameters"][0]["required"] = 'false'
 
 def validate_username_format(username):
     return bool(re.match(USERNAME_REGEX_PATTERN, username))

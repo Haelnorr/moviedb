@@ -1,15 +1,31 @@
-from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, current_user
-from flask_smorest import Blueprint, abort
+from datetime import timedelta
+import os
+from flask import jsonify
+import redis
+from flask_jwt_extended import  get_jwt, jwt_required, current_user
+from flask_smorest import Blueprint, abort, error_handler
 from flask_smorest.blueprint import MethodView
-from src.api.auth.functions import JWT_AUTH_REQ, check_username_exists, create_new_user, get_user, validate_username_format
+from src.api.variables import JWT_ACCESS_EXPIRY, JWT_AUTH_REQ, JWT_REFRESH_EXPIRY, JWT_REFRESH_REQ, JWT_AUTH_REQ_DUAL
+from src.api.auth.functions import check_username_exists, create_new_user, get_user, validate_username_format
 from src.api.auth.schemas import LoginUserParams, RegisterUserParams, TokenResponse, UserDetails
 from src.api import jwt
 from src.logger.logger import get_logger
-from datetime import timedelta
 
 log = get_logger(__name__)
 
 blp = Blueprint("auth", "auth", url_prefix="/auth", description="Auth API")
+
+jwt_redis_blocklist = redis.StrictRedis(
+    # NOTE: if REDIS envar not set, defaults to 'redis' as assumed to be
+    # running inside docker compose with redis dependency
+    host=os.getenv('REDIS', "redis"), port=6379, db=0, decode_responses=True
+)
+
+@jwt.token_in_blocklist_loader
+def check_if_token_is_revoked(jwt_header, jwt_payload: dict):
+    jti = jwt_payload["jti"]
+    token_in_redis = jwt_redis_blocklist.get(jti)
+    return token_in_redis is not None
 
 @jwt.user_identity_loader
 def user_identity_lookup(user):
@@ -20,11 +36,11 @@ def user_lookup_callback(_jwt_header, jwt_data):
     identity = jwt_data["sub"]
     return get_user(id=identity)
 
-# TODO: make all the potential error codes show up in the docs
 @blp.route("/register")
 class Register(MethodView):
     @blp.arguments(RegisterUserParams, location="json")
     @blp.response(status_code=201)
+    @blp.alt_response(400, schema=error_handler.ErrorSchema)
     def post(self, parameters):
         username = parameters["username"]
         password = parameters["password"]
@@ -39,11 +55,11 @@ class Register(MethodView):
 
         create_new_user(username, password)
 
-# TODO: make all the potential error codes show up in the docs
 @blp.route("/login")
 class Login(MethodView):
     @blp.arguments(LoginUserParams, location="json")
     @blp.response(status_code=200, schema=TokenResponse)
+    @blp.alt_response(401, schema=error_handler.ErrorSchema)
     def post(self, parameters):
         username = parameters["username"]
         password = parameters["password"]
@@ -51,28 +67,49 @@ class Login(MethodView):
         user = get_user(username)
         if not user or not user.check_password(password):
             abort(401, message="Invalid credentials")
-        # TODO: change to 2 hr for access and 7 days for refresh
-        access_expires = timedelta(seconds=15)
-        refresh_expires = timedelta(hours=2)
-        access_token = create_access_token(user.json(), expires_delta=access_expires)
-        refresh_token = create_refresh_token(user.json(), expires_delta=refresh_expires)
 
-        return { 
-            "access_token": access_token,
-            "access_expires": access_expires.total_seconds(),
-            "refresh_token": refresh_token,
-            "refresh_expires": refresh_expires.total_seconds()
-        }
+        return user.generate_tokens(fresh=timedelta(minutes=15))
 
-# TODO: make all the potential error codes show up in the docs
 @blp.route("/@me")
 class CheckCurrentUser(MethodView):
     @blp.doc(**JWT_AUTH_REQ)
     @jwt_required()
     @blp.response(status_code=200, schema=UserDetails)
+    @blp.alt_response(401, schema=error_handler.ErrorSchema)
     def get(self):
         return current_user.json()
 
-# TODO: invalidate tokens
-# TODO: use refresh token
+@blp.route("/refresh")
+class RefreshTokens(MethodView):
+    @blp.doc(**JWT_REFRESH_REQ)
+    @jwt_required(refresh=True)
+    @blp.response(status_code=200, schema=TokenResponse)
+    @blp.alt_response(401, schema=error_handler.ErrorSchema)
+    def post(self):
+        jti = get_jwt()["jti"]
+        jwt_redis_blocklist.set(jti, "", ex=JWT_REFRESH_EXPIRY)
+        return current_user.generate_tokens(fresh=False)
+
+@blp.route("/logout")
+class RevokeTokens(MethodView):
+    @blp.doc(**JWT_AUTH_REQ_DUAL)
+    @jwt_required(verify_type=False)
+    @blp.response(status_code=200)
+    @blp.alt_response(401, schema=error_handler.ErrorSchema)
+    def delete(self):
+        token = get_jwt()
+        jti = token["jti"]
+        ttype = token["type"]
+        ttl = { "access":JWT_ACCESS_EXPIRY, "refresh":JWT_REFRESH_EXPIRY }
+        jwt_redis_blocklist.set(jti, "", ex=ttl[ttype])
+
 # TODO: change password
+# TODO: token freshness pattern
+# https://flask-jwt-extended.readthedocs.io/en/stable/refreshing_tokens.html#token-freshness-pattern
+@blp.route("/change_password")
+class ChangePassword(MethodView):
+    @blp.doc(**JWT_AUTH_REQ)
+    @jwt_required(fresh=True)
+    def put(self):
+        pass
+
