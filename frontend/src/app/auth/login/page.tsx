@@ -1,9 +1,20 @@
+"use client";
 import LoginForm from "@/app/ui/components/auth/loginForm";
+import useAuthenticatedUser from "@/app/util/api/auth";
+import LoginFormContextProvider from "@/contexts/loginform";
+import { redirect } from "next/navigation";
 
 const LoginPage = () => {
+    const { user, loggedOut, loading } = useAuthenticatedUser();
+    const loggedIn = user && !loggedOut && !loading;
+    if (loggedIn) {
+        redirect("/");
+    }
     return (
         <>
-            <LoginForm/>
+            <LoginFormContextProvider>
+                <LoginForm />
+            </LoginFormContextProvider>
         </>
     )
 }

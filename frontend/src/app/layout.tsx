@@ -5,8 +5,8 @@ import { techmono } from "./ui/fonts";
 import TopNav from "@/app/ui/components/nav/topnav";
 
 export const metadata: Metadata = {
-  title: "MovieDB",
-  description: "Movie reviews, suggestions and more - by Haelnorr",
+    title: "MovieDB",
+    description: "Movie reviews, suggestions and more - by Haelnorr",
 };
 
 export const viewport: Viewport = {
@@ -15,20 +15,22 @@ export const viewport: Viewport = {
 }
 
 const RootLayout = ({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) => {
-  return (
-    <html lang="en" data-bs-theme="dark">
-      <body
-        className={`${techmono.className} antialiased`}
-      >
-        <TopNav />
-        {children}
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en" data-bs-theme="dark">
+            <body
+                className={`${techmono.className} antialiased`}
+            >
+                <TopNav />
+                <div className="content">
+                    {children}
+                </div>
+            </body>
+        </html>
+    );
 }
 
 export default RootLayout;

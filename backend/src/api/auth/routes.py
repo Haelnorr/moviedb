@@ -1,15 +1,26 @@
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, current_user
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, current_user
 from flask_smorest import Blueprint, abort
 from flask_smorest.blueprint import MethodView
 from src.api.auth.functions import JWT_AUTH_REQ, check_username_exists, create_new_user, get_user, validate_username_format
 from src.api.auth.schemas import LoginUserParams, RegisterUserParams, TokenResponse, UserDetails
 from src.api import jwt
 from src.logger.logger import get_logger
+from datetime import timedelta
 
 log = get_logger(__name__)
 
 blp = Blueprint("auth", "auth", url_prefix="/auth", description="Auth API")
 
+@jwt.user_identity_loader
+def user_identity_lookup(user):
+    return f"{user["id"]}"
+
+@jwt.user_lookup_loader
+def user_lookup_callback(_jwt_header, jwt_data): 
+    identity = jwt_data["sub"]
+    return get_user(id=identity)
+
+# TODO: make all the potential error codes show up in the docs
 @blp.route("/register")
 class Register(MethodView):
     @blp.arguments(RegisterUserParams, location="json")
@@ -28,15 +39,7 @@ class Register(MethodView):
 
         create_new_user(username, password)
 
-@jwt.user_identity_loader
-def user_identity_lookup(user):
-    return f"{user["id"]}"
-
-@jwt.user_lookup_loader
-def user_lookup_callback(_jwt_header, jwt_data):
-    identity = jwt_data["sub"]
-    return get_user(id=identity)
-
+# TODO: make all the potential error codes show up in the docs
 @blp.route("/login")
 class Login(MethodView):
     @blp.arguments(LoginUserParams, location="json")
@@ -48,11 +51,20 @@ class Login(MethodView):
         user = get_user(username)
         if not user or not user.check_password(password):
             abort(401, message="Invalid credentials")
+        # TODO: change to 2 hr for access and 7 days for refresh
+        access_expires = timedelta(seconds=15)
+        refresh_expires = timedelta(hours=2)
+        access_token = create_access_token(user.json(), expires_delta=access_expires)
+        refresh_token = create_refresh_token(user.json(), expires_delta=refresh_expires)
 
-        access_token = create_access_token(user.json())
+        return { 
+            "access_token": access_token,
+            "access_expires": access_expires.total_seconds(),
+            "refresh_token": refresh_token,
+            "refresh_expires": refresh_expires.total_seconds()
+        }
 
-        return { "access_token": access_token }
-
+# TODO: make all the potential error codes show up in the docs
 @blp.route("/@me")
 class CheckCurrentUser(MethodView):
     @blp.doc(**JWT_AUTH_REQ)
@@ -60,3 +72,7 @@ class CheckCurrentUser(MethodView):
     @blp.response(status_code=200, schema=UserDetails)
     def get(self):
         return current_user.json()
+
+# TODO: invalidate tokens
+# TODO: use refresh token
+# TODO: change password

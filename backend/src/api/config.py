@@ -1,4 +1,4 @@
-import os, redis
+import os
 from pathlib import Path
 
 # Get directory of this file

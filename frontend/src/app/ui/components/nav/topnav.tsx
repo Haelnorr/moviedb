@@ -4,6 +4,9 @@ import styles from "@/app/ui/components/nav/styles.module.css";
 import { usePathname } from "next/navigation";
 import clsx from 'clsx';
 import { useEffect } from "react";
+import useAuthenticatedUser, { User } from "@/app/util/api/auth";
+import { mutate } from "swr";
+import { deleteCookie } from "cookies-next";
 
 type NavLinkData = {
     name: string;
@@ -17,25 +20,22 @@ type NavLinkData = {
 const links: NavLinkData[] = [
     {
         name: "Home",
-        href: "/"
+        href: "/",
     },
     {
-        name: "Login",
-        href: "/auth/login"
-    },
-    {
-        name: "Register",
-        href: "/auth/register"
-    },
+        name: "Movies",
+        href: "/movies"
+    }
 ];
 
-const NavLink = (props:{link:NavLinkData}) => {
+
+const NavLink = (props: { link: NavLinkData }) => {
     const pathname = usePathname();
     const active = pathname === props.link.href;
     return (
         <>
-           <li className="nav-item">
-                <Link 
+            <li className="nav-item">
+                <Link
                     className={clsx(
                         `nav-link ${styles.navlink}`,
                         {
@@ -52,7 +52,7 @@ const NavLink = (props:{link:NavLinkData}) => {
     );
 }
 
-const NavDropdown = (props:{link:NavLinkData}) => {
+const NavDropdown = (props: { link: NavLinkData }) => {
     return (
         <>
             <li className="nav-item dropdown">
@@ -79,9 +79,9 @@ const NavList = () => {
                     links.map((link, index) => {
                         const key = `nav-item-${index}`;
                         if (link.dropdown) {
-                            return <NavDropdown link={link} key={key}/>
+                            return <NavDropdown link={link} key={key} />
                         } else {
-                            return <NavLink link={link} key={key}/>
+                            return <NavLink link={link} key={key} />
                         }
                     })
                 }
@@ -94,11 +94,77 @@ const NavSearch = () => {
     return (
         <>
             <form className="d-flex" role="search">
-                <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+                <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
                 <button className="btn btn-outline-success" type="submit">Search</button>
             </form>
         </>
     );
+}
+
+const LogoutButton = (props: { onLogout: Function }) => {
+    return (
+        <>
+            <Link
+                href="#"
+                className={`btn btn-primary ${styles.userlogout}`}
+                role="button"
+                onClick={() => props.onLogout()}
+            >
+                Logout
+            </Link>
+        </>
+    );
+}
+
+const LoginButton = () => {
+    // TODO: add current page path to login params so user can return to where
+    // they came from
+    return (
+        <>
+            <Link
+                href="/auth/login"
+                className={`btn btn-primary ${styles.userlogin}`}
+                role="button">
+                Login
+            </Link>
+        </>
+    );
+}
+
+const UserProfile = (props: { user: User }) => {
+    return (
+        <Link
+            href="#"
+            className={`btn btn-dark btn-outline-info ${styles.userprofile}`}
+            role="button">
+            {props.user.username}
+        </Link>
+    );
+}
+
+const UserTile = () => {
+    const { user, loggedOut, loading, mutateAuth } = useAuthenticatedUser();
+    const loggedIn = user && !loggedOut && !loading;
+    if (loggedIn) {
+        mutateAuth();
+    }
+    function userLogout() {
+        deleteCookie('access_token');
+        deleteCookie('refresh_token');
+        mutateAuth();
+    }
+    return (
+        <div className={styles.usertile}>
+            {loggedIn &&
+                <ul className="navbar-nav me-auto">
+                    <li><UserProfile user={user} /></li>
+                    <li><LogoutButton onLogout={userLogout} /></li>
+                </ul>
+                ||
+                <LoginButton />
+            }
+        </div>
+    )
 }
 
 const NavItems = () => {
@@ -107,6 +173,7 @@ const NavItems = () => {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <NavList />
                 <NavSearch />
+                <UserTile />
             </div>
         </>
     );

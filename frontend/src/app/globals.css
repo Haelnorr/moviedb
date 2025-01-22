@@ -27,7 +27,6 @@
     --crust: #11111b;
 }
 
-/*body {
-  color: var(--text);
-  background: var(--base);
-}*/
+.content {
+    margin-top: 25px;
+}

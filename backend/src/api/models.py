@@ -1,5 +1,4 @@
 from typing import Optional
-from flask_jwt_extended import create_access_token
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from src.api import db
@@ -28,6 +27,3 @@ class User(db.Model):
             "id": self.id,
             "username": self.username
         }
-
-    def create_access_token(self):
-        return create_access_token(identity=self.json())

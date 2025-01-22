@@ -16,3 +16,6 @@ class UserDetails(Schema):
 
 class TokenResponse(Schema):
     access_token = fields.Str()
+    access_expires = fields.Int()
+    refresh_token = fields.Str()
+    refresh_expires = fields.Int()

@@ -22,3 +22,28 @@
     color: var(--green);
     transition: all 0.35s ease-in;
 }
+
+.usertile {
+    margin-left: 0px;
+}
+
+.userprofile, .userlogin, .userlogout {
+    display: block;
+    margin-top: 15px;
+    max-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+@media (min-width: 992px) {
+    .usertile {
+        margin-left: 15px;
+    }
+    .userprofile {
+        display: inline-block;
+        margin-right: 5px;
+        margin-top: 0px;
+    }
+    .userlogin, .userlogout {
+        margin-top: 0px;
+    }
+}
