@@ -152,6 +152,7 @@ const UserTile = () => {
         deleteCookie('access_token');
         deleteCookie('refresh_token');
         mutateAuth();
+        // TODO: tell server to revoke refresh token
     }
     return (
         <div className={styles.usertile}>

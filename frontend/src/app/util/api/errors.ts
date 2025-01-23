@@ -30,6 +30,12 @@ export class NotFound extends APIError {
         this.name = "NotFound";
     }
 }
+export class MethodNotAllowed extends APIError {
+    constructor() {
+        super("405 Method Not Allowed");
+        this.name = "MethodNotAllowed";
+    }
+}
 export class UnprocessableContent extends APIError {
     constructor() {
         super("422 Unprocessable Content");
