@@ -1,9 +1,5 @@
-
 const MoviesPage = () => {
-    return (
-        <>
-        </>
-    );
-}
+  return <></>;
+};
 
 export default MoviesPage;

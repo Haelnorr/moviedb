@@ -1,49 +1,54 @@
 .navbar {
-    background-color: var(--crust);
+  background-color: var(--crust);
 }
 
 .navbrand {
-    font-size: 1.7em;
+  font-size: 1.7em;
 }
 
 .navlink {
-    font-size: 1.4em;
-    margin-right: 10px;
+  font-size: 1.4em;
+  margin-right: 10px;
 }
 
-.navbrand, .navlink {
-    color: var(--text);
-    padding-inline: 20px;
-    transition: all 0.35s ease-out;
-    text-decoration: none;
+.navbrand,
+.navlink {
+  color: var(--text);
+  padding-inline: 20px;
+  transition: all 0.35s ease-out;
+  text-decoration: none;
 }
 
-.navbrand:hover, .navlink:hover {
-    color: var(--green);
-    transition: all 0.35s ease-in;
+.navbrand:hover,
+.navlink:hover {
+  color: var(--green);
+  transition: all 0.35s ease-in;
 }
 
 .usertile {
-    margin-left: 0px;
+  margin-left: 0px;
 }
 
-.userprofile, .userlogin, .userlogout {
-    display: block;
-    margin-top: 15px;
-    max-width: 200px;
-    margin-left: auto;
-    margin-right: auto;
+.userprofile,
+.userlogin,
+.userlogout {
+  display: block;
+  margin-top: 15px;
+  max-width: 200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 @media (min-width: 992px) {
-    .usertile {
-        margin-left: 15px;
-    }
-    .userprofile {
-        display: inline-block;
-        margin-right: 5px;
-        margin-top: 0px;
-    }
-    .userlogin, .userlogout {
-        margin-top: 0px;
-    }
+  .usertile {
+    margin-left: 15px;
+  }
+  .userprofile {
+    display: inline-block;
+    margin-right: 5px;
+    margin-top: 0px;
+  }
+  .userlogin,
+  .userlogout {
+    margin-top: 0px;
+  }
 }

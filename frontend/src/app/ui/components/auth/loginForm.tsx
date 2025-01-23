@@ -1,7 +1,7 @@
 "use client";
-import styles from "@/app/ui/components/auth/styles.module.css";
-import useAuthenticatedUser, { loginUser, Token } from "@/app/util/api/auth";
-import { ServiceUnavailable, Unauthorized } from "@/app/util/api/errors";
+import styles from "@/components/auth/styles.module.css";
+import useAuthenticatedUser, { loginUser, Token } from "@/util/api/auth";
+import { ServiceUnavailable, Unauthorized } from "@/util/api/errors";
 import { useLoginFormContext } from "@/contexts/loginform";
 import clsx from "clsx";
 import { setCookie } from "cookies-next";
