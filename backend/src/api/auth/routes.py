@@ -1,14 +1,31 @@
-from datetime import timedelta
 import os
-from flask import jsonify
+from datetime import timedelta
+
 import redis
-from flask_jwt_extended import  get_jwt, jwt_required, current_user
+from flask_jwt_extended import current_user, get_jwt, jwt_required
 from flask_smorest import Blueprint, abort, error_handler
 from flask_smorest.blueprint import MethodView
-from src.api.variables import JWT_ACCESS_EXPIRY, JWT_AUTH_REQ, JWT_REFRESH_EXPIRY, JWT_REFRESH_REQ, JWT_AUTH_REQ_DUAL
-from src.api.auth.functions import check_username_exists, create_new_user, get_user, validate_username_format
-from src.api.auth.schemas import LoginUserParams, RegisterUserParams, TokenResponse, UserDetails
+
 from src.api import jwt
+from src.api.auth.functions import (
+    check_username_exists,
+    create_new_user,
+    get_user,
+    validate_username_format,
+)
+from src.api.auth.schemas import (
+    LoginUserParams,
+    RegisterUserParams,
+    TokenResponse,
+    UserDetails,
+)
+from src.api.variables import (
+    JWT_ACCESS_EXPIRY,
+    JWT_AUTH_REQ,
+    JWT_AUTH_REQ_DUAL,
+    JWT_REFRESH_EXPIRY,
+    JWT_REFRESH_REQ,
+)
 from src.logger.logger import get_logger
 
 log = get_logger(__name__)
@@ -18,8 +35,12 @@ blp = Blueprint("auth", "auth", url_prefix="/auth", description="Auth API")
 jwt_redis_blocklist = redis.StrictRedis(
     # NOTE: if REDIS envar not set, defaults to 'redis' as assumed to be
     # running inside docker compose with redis dependency
-    host=os.getenv('REDIS', "redis"), port=6379, db=0, decode_responses=True
+    host=os.getenv("REDIS", "redis"),
+    port=6379,
+    db=0,
+    decode_responses=True,
 )
+
 
 @jwt.token_in_blocklist_loader
 def check_if_token_is_revoked(jwt_header, jwt_payload: dict):
@@ -27,14 +48,17 @@ def check_if_token_is_revoked(jwt_header, jwt_payload: dict):
     token_in_redis = jwt_redis_blocklist.get(jti)
     return token_in_redis is not None
 
+
 @jwt.user_identity_loader
 def user_identity_lookup(user):
     return f"{user["id"]}"
 
+
 @jwt.user_lookup_loader
-def user_lookup_callback(_jwt_header, jwt_data): 
+def user_lookup_callback(_jwt_header, jwt_data):
     identity = jwt_data["sub"]
     return get_user(id=identity)
+
 
 @blp.route("/register")
 class Register(MethodView):
@@ -55,6 +79,7 @@ class Register(MethodView):
 
         create_new_user(username, password)
 
+
 @blp.route("/login")
 class Login(MethodView):
     @blp.arguments(LoginUserParams, location="json")
@@ -70,6 +95,7 @@ class Login(MethodView):
 
         return user.generate_tokens(fresh=timedelta(minutes=15))
 
+
 @blp.route("/@me")
 class CheckCurrentUser(MethodView):
     @blp.doc(**JWT_AUTH_REQ)
@@ -78,6 +104,7 @@ class CheckCurrentUser(MethodView):
     @blp.alt_response(401, schema=error_handler.ErrorSchema)
     def get(self):
         return current_user.json()
+
 
 @blp.route("/refresh")
 class RefreshTokens(MethodView):
@@ -90,6 +117,7 @@ class RefreshTokens(MethodView):
         jwt_redis_blocklist.set(jti, "", ex=JWT_REFRESH_EXPIRY)
         return current_user.generate_tokens(fresh=False)
 
+
 @blp.route("/logout")
 class RevokeTokens(MethodView):
     @blp.doc(**JWT_AUTH_REQ_DUAL)
@@ -100,8 +128,9 @@ class RevokeTokens(MethodView):
         token = get_jwt()
         jti = token["jti"]
         ttype = token["type"]
-        ttl = { "access":JWT_ACCESS_EXPIRY, "refresh":JWT_REFRESH_EXPIRY }
+        ttl = {"access": JWT_ACCESS_EXPIRY, "refresh": JWT_REFRESH_EXPIRY}
         jwt_redis_blocklist.set(jti, "", ex=ttl[ttype])
+
 
 # TODO: change password
 # TODO: token freshness pattern
@@ -112,4 +141,3 @@ class ChangePassword(MethodView):
     @jwt_required(fresh=True)
     def put(self):
         pass
-

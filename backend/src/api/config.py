@@ -4,12 +4,13 @@ from pathlib import Path
 # Get directory of this file
 path = os.path.dirname(os.path.abspath(__file__))
 # Go up to project root
-for _ in range(2):
+for _ in range(3):
     path = Path(path).parent.absolute()
-dev_db = os.path.join(path, "data.sqlite")
+dev_db = os.path.join(path, "data", "data.sqlite")
+
 
 class Config:
-    SECRET_KEY = os.getenv('SECRET_KEY')
+    SECRET_KEY = os.getenv("SECRET_KEY")
     API_TITLE = "MovieDB API"
     API_VERSION = "v1"
     API_SPEC_OPTIONS = {
@@ -30,7 +31,6 @@ class Config:
     OPENAPI_SWAGGER_UI_PATH = "/docs"
     OPENAPI_SWAGGER_UI_URL = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
 
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', f'sqlite:///{dev_db}')
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", f"sqlite:///{dev_db}")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLACHEMY_ECHO = True
-    

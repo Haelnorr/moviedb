@@ -3,20 +3,21 @@ import enum
 from marshmallow import Schema, fields
 
 
-
-
 class Genre(Schema):
     id = fields.Int()
     name = fields.String()
+
 
 class Theme(Schema):
     id = fields.Int()
     name = fields.String()
 
+
 class Language(Schema):
     english_name = fields.String()
     iso_639_1 = fields.String()
     name = fields.String()
+
 
 class AddMovie(Schema):
     rating = fields.String()
@@ -40,8 +41,10 @@ class AddMovie(Schema):
 class Movie(AddMovie):
     id = fields.Int()
 
+
 class ListMovies(Schema):
     movies = fields.List(fields.Nested(Movie))
+
 
 class SortByEnum(enum.Enum):
     budget = "budget"
@@ -51,14 +54,15 @@ class SortByEnum(enum.Enum):
     title = "title"
     review = "review"
 
+
 class SortDirectionEnum(enum.Enum):
     asc = "asc"
     desc = "desc"
 
+
 class SearchMoviesParams(Schema):
     order_by = fields.Enum(SortByEnum, load_default=SortByEnum.title)
     order = fields.Enum(SortDirectionEnum, load_default=SortDirectionEnum.asc)
-    title = fields.String(optional=True)
+    title = fields.String(metadata={"optional": True})
     genres = fields.List(fields.Nested(Genre))
     themes = fields.List(fields.Nested(Theme))
-
