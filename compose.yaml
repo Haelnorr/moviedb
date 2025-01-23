@@ -3,20 +3,32 @@ services:
     build:
       context: .
       dockerfile: ./compose/flask/Dockerfile
+    container_name: mdb-flask
+    command: /start
     ports:
       - 8000:8000
     env_file:
       .envfiles/.backend
     environment:
-      - FLASK_APP=src/runtest.py
       - LOG_DIR=/var/log/backend
+      - FLASK_APP=src/run.py
+      - DATABASE=/data/data.sqlite
     depends_on:
       - redis
     volumes:
       - ./backend/src:/backend/src
-      - ./migrations/versions:/backend/migrations/versions
+      - ./backend/migrations/versions:/backend/migrations/versions
+      - ./data:/data
+    restart: unless-stopped
 
   redis:
     image: redis:latest
+    container_name: mdb-redis
+    command: ["redis-server", "--appendonly", "yes", "--appendfilename", "appendonly.aof", "--appendfsync", "everysec"]
+    volumes:
+      - ./data:/data
     ports:
-      - 6379:6379
+      - "6379:6379"
+    restart: unless-stopped
+
+

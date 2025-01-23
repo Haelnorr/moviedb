@@ -4,9 +4,10 @@ from pathlib import Path
 # Get directory of this file
 path = os.path.dirname(os.path.abspath(__file__))
 # Go up to project root
-for _ in range(3):
+for _ in range(2):
     path = Path(path).parent.absolute()
-dev_db = os.path.join(path, "data", "data.sqlite")
+dev_db = os.path.join(path, "data.sqlite")
+database_file = os.getenv("DATABASE", dev_db)
 
 
 class Config:
@@ -31,6 +32,6 @@ class Config:
     OPENAPI_SWAGGER_UI_PATH = "/docs"
     OPENAPI_SWAGGER_UI_URL = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
 
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", f"sqlite:///{dev_db}")
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{database_file}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLACHEMY_ECHO = True

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+flask db upgrade
+
+gunicorn --bind 0.0.0.0:8000 src.run:app

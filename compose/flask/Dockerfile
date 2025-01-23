@@ -13,7 +13,15 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 COPY ./backend .
 
+COPY ./compose/flask/entrypoint /entrypoint
+RUN sed -i 's/\r$//g' /entrypoint
+RUN chmod +x /entrypoint
+
+COPY ./compose/flask/start /start
+RUN sed -i 's/\r$//g' /start
+RUN chmod +x /start
+
 RUN mkdir /var/log/backend
 RUN chmod o+rw -R /var/log/backend
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "src.run:app"]
+ENTRYPOINT [ "/entrypoint" ]

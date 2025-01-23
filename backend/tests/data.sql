@@ -1,3 +1,3 @@
 INSERT INTO user (username, password_hash)
 VALUES
-    ('test', 'scrypt:32768:8:1$0xaEiK1ML21p11Hr$b1f8460e17548d675c6fccab9947b566d208997a6e0d793e96ad98d3c475eee313a95dcbcbbf2652c5d6a0ba3b50defef972055cb318f87cc14d4914eef91ab3');
+    ('test', 'scrypt:32768:8:1$xeqbjdslhq0SFaix$946fbbda7adf5985c0524dc47b21bcd102aa99123404243fb75c69df175dcb3aa9493cf0469462ed0bf6348049438644c5ca58c4d05a47732e53f6317d830dbe');
