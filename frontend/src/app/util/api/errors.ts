@@ -1,3 +1,29 @@
+export function apiErrorAsValue(err: Error) {
+  var error;
+  if (err instanceof Unauthorized) {
+    error = "Unauthorized";
+  } else if (err instanceof ServiceUnavailable) {
+    error = "ServiceUnavailable";
+  } else if (err instanceof BadRequest) {
+    error = "BadRequest";
+  } else if (err instanceof Forbidden) {
+    error = "Forbidden";
+  } else if (err instanceof NotFound) {
+    error = "NotFound";
+  } else if (err instanceof MethodNotAllowed) {
+    error = "MethodNotAllowed";
+  } else if (err instanceof UnprocessableContent) {
+    error = "UnprocessableContent";
+  } else if (err instanceof InternalServerError) {
+    error = "InternalServerError";
+  } else if (err instanceof APIError) {
+    error = `Unhandled API Error: ${err.message}`;
+  } else {
+    error = "Unknown";
+    console.error(err);
+  }
+  return error;
+}
 export class APIError extends Error {
   constructor(message: string) {
     super(`Unhandled API Error ${message}`);

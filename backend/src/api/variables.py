@@ -3,9 +3,8 @@ from datetime import timedelta
 
 USERNAME_REGEX_PATTERN = "^[A-Za-z0-9_-]*$"
 
-# TODO: change to 2 hr for access and 7 days for refresh
-JWT_ACCESS_EXPIRY = timedelta(seconds=300)
-JWT_REFRESH_EXPIRY = timedelta(hours=2)
+JWT_ACCESS_EXPIRY = timedelta(hours=2)
+JWT_REFRESH_EXPIRY = timedelta(days=7)
 
 JWT_AUTH_REQ = {
     "parameters": [

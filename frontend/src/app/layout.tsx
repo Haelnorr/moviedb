@@ -1,8 +1,8 @@
-import type { Metadata, Viewport } from "next";
 import "@/app/ui/theme.scss";
-import "./globals.css";
-import { techmono } from "./ui/fonts";
+import "@/app/globals.css";
+import { techmono } from "@/app/ui/fonts";
 import TopNav from "@/components/nav/topnav";
+import type { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
   title: "MovieDB",

@@ -4,14 +4,14 @@ import {
   BadRequest,
   Forbidden,
   InternalServerError,
+  MethodNotAllowed,
   NotFound,
   ServiceUnavailable,
   Unauthorized,
   UnprocessableContent,
 } from "@/util/api/errors";
 
-// TODO: change to using an envar
-const apiURI: string = "http://127.0.0.1:5000/";
+const apiURI = process.env.API_URL;
 
 function handleError(err: AxiosError) {
   if (err) {
@@ -27,12 +27,14 @@ function handleError(err: AxiosError) {
           throw new Forbidden();
         case 404:
           throw new NotFound();
+        case 405:
+          throw new MethodNotAllowed();
         case 422:
           throw new UnprocessableContent();
         case 500:
           throw new InternalServerError();
         default:
-          throw new APIError(`Unhandled: ${JSON.stringify(err.response)}`);
+          throw new APIError(`Unhandled: ${err.response}`);
       }
     } else {
       throw err;
@@ -43,15 +45,15 @@ function handleError(err: AxiosError) {
 export async function apiPost(
   endpoint: string,
   input: Record<string, unknown> = {},
-  accessToken: string | undefined = undefined,
+  token: string | undefined = undefined,
 ): Promise<any> {
   const requestURL = apiURI + endpoint;
   var response;
-  if (accessToken) {
+  if (token) {
     response = await axios
       .post(requestURL, input, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .catch((err) => handleError(err));
@@ -80,5 +82,21 @@ export async function apiGet(
   } else {
     response = await axios.get(requestURL).catch((err) => handleError(err));
   }
+  return response;
+}
+
+export async function apiDelete(
+  endpoint: string,
+  accessToken: string | undefined = undefined,
+): Promise<any> {
+  const requestURL = apiURI + endpoint;
+  var response;
+  response = await axios
+    .delete(requestURL, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    .catch((err) => handleError(err));
   return response;
 }

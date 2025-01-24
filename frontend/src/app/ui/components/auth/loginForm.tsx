@@ -1,10 +1,8 @@
 "use client";
 import styles from "@/components/auth/styles.module.css";
-import useAuthenticatedUser, { loginUser, Token } from "@/util/api/auth";
-import { ServiceUnavailable, Unauthorized } from "@/util/api/errors";
+import { loginUser } from "@/app/util/api/loginuser";
 import { useLoginFormContext } from "@/contexts/loginform";
 import clsx from "clsx";
-import { setCookie } from "cookies-next";
 
 const FormUsername = () => {
   const { setUsername, errorCredentials, setErrorCredentials } =
@@ -88,43 +86,29 @@ const FormButtonContainer = ({
   return <div className={styles.buttonwrapper}>{children}</div>;
 };
 
-const LoginForm = () => {
+const LoginForm = (props: { onLogin: Function }) => {
   const context = useLoginFormContext();
-  const { mutateAuth } = useAuthenticatedUser();
-
-  function setCookies(loginToken: Token) {
-    setCookie("access_token", loginToken.access_token, {
-      secure: true,
-      maxAge: loginToken.access_expires,
-    });
-    setCookie("refresh_token", loginToken.refresh_token, {
-      secure: true,
-      maxAge: loginToken.refresh_expires,
-    });
-  }
 
   async function handleSubmit() {
-    await loginUser(context.username, context.password)
-      .catch((err) => {
-        context.setErrorMessage("");
-        context.setErrorCredentials(false);
-        if (err instanceof Unauthorized) {
-          context.setErrorCredentials(true);
-        } else if (err instanceof ServiceUnavailable) {
-          context.setErrorMessage(
-            "Error connecting to server, try again later.",
-          );
-        } else {
-          context.setErrorMessage("An error has occured.");
-          console.error(err);
-        }
-      })
-      .then((resp) => {
-        if (resp && resp.status === 200) {
-          setCookies(resp.data as Token);
-          mutateAuth();
-        }
-      });
+    const { login, error } = await loginUser(
+      context.username,
+      context.password,
+    );
+    if (login && !error) {
+      props.onLogin();
+    } else {
+      context.setErrorMessage("");
+      context.setErrorCredentials(false);
+      if (error === "Unauthorized") {
+        context.setErrorCredentials(true);
+      } else if (error === "ServiceUnavailable") {
+        context.setErrorMessage("Error connecting to server, try again later.");
+      } else {
+        context.setErrorMessage(
+          "An unknown error has occured. Please contact a system administrator",
+        );
+      }
+    }
   }
 
   function handlePasswordKeyDown(key: string) {

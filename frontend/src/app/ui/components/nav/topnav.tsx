@@ -4,8 +4,9 @@ import styles from "@/components/nav/styles.module.css";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { useEffect } from "react";
-import useAuthenticatedUser, { User } from "@/util/api/auth";
-import { deleteCookie } from "cookies-next";
+import useAuthenticatedUser from "@/app/util/api/userSWR";
+import type { User } from "@/util/types";
+import { logoutUser } from "@/app/util/api/logoutuser";
 
 type NavLinkData = {
   name: string;
@@ -155,16 +156,24 @@ const UserProfile = (props: { user: User }) => {
 };
 
 const UserTile = () => {
-  const { user, loggedOut, loading, mutateAuth } = useAuthenticatedUser();
-  const loggedIn = user && !loggedOut && !loading;
-  if (loggedIn) {
-    mutateAuth();
-  }
-  function userLogout() {
-    deleteCookie("access_token");
-    deleteCookie("refresh_token");
-    mutateAuth();
-    // TODO: tell server to revoke refresh token
+  const { user, loading, mutateAuth } = useAuthenticatedUser();
+  const loggedIn = user && !loading;
+  async function userLogout() {
+    const { revokeAccessError, revokeRefreshError } = await logoutUser();
+    if (revokeAccessError) {
+      console.error(`Error logging out: ${revokeAccessError}`);
+    }
+    if (revokeRefreshError) {
+      console.error(`Error revoking refresh token: ${revokeRefreshError}`);
+    }
+    if (!revokeAccessError && !revokeRefreshError) {
+      mutateAuth();
+    } else {
+      // TODO: handle failed logout with user feedback. error popup maybe?
+      console.error(
+        "An error occured logging out. If the error persists contact a system administrator",
+      );
+    }
   }
   return (
     <div className={styles.usertile}>

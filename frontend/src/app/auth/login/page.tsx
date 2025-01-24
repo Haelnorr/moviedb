@@ -1,20 +1,28 @@
 "use client";
 import LoginForm from "@/components/auth/loginForm";
-import useAuthenticatedUser from "@/util/api/auth";
+import useAuthenticatedUser from "@/app/util/api/userSWR";
 import LoginFormContextProvider from "@/contexts/loginform";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const LoginPage = () => {
-  const { user, loggedOut, loading } = useAuthenticatedUser();
-  const loggedIn = user && !loggedOut && !loading;
-  if (loggedIn) {
-    redirect("/");
-  }
+  const router = useRouter();
+  const { user, loading, mutateAuth } = useAuthenticatedUser();
+  const loggedIn = user && !loading;
+
+  useEffect(() => {
+    if (loggedIn) {
+      router.push("/");
+    }
+  }, [user, loggedIn, router]);
+
   return (
     <>
-      <LoginFormContextProvider>
-        <LoginForm />
-      </LoginFormContextProvider>
+      {!user && !loading && (
+        <LoginFormContextProvider>
+          <LoginForm onLogin={mutateAuth} />
+        </LoginFormContextProvider>
+      )}
     </>
   );
 };
