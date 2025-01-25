@@ -1,12 +1,13 @@
 "use client";
 import Link from "next/link";
 import styles from "@/components/nav/styles.module.css";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import clsx from "clsx";
 import { useEffect } from "react";
 import useAuthenticatedUser from "@/app/util/api/userSWR";
 import type { User } from "@/util/types";
 import { logoutUser } from "@/app/util/api/logoutuser";
+import { loginRedirectPath } from "@/app/util/api/loginredirect";
 
 type NavLinkData = {
   name: string;
@@ -128,16 +129,31 @@ const LogoutButton = (props: { onLogout: Function }) => {
 };
 
 const LoginButton = () => {
-  // TODO: add current page path to login params so user can return to where
-  // they came from
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   return (
     <>
       <Link
-        href="/auth/login"
+        href={loginRedirectPath("login", pathname, searchParams)}
         className={`btn btn-primary ${styles.userlogin}`}
         role="button"
       >
         Login
+      </Link>
+    </>
+  );
+};
+const RegisterButton = () => {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  return (
+    <>
+      <Link
+        href={loginRedirectPath("register", pathname, searchParams)}
+        className={`btn btn-primary ${styles.userlogin}`}
+        role="button"
+      >
+        Register
       </Link>
     </>
   );
@@ -158,6 +174,7 @@ const UserProfile = (props: { user: User }) => {
 const UserTile = () => {
   const { user, loading, mutateAuth } = useAuthenticatedUser();
   const loggedIn = user && !loading;
+  const pathname = usePathname();
   async function userLogout() {
     const { revokeAccessError, revokeRefreshError } = await logoutUser();
     if (revokeAccessError) {
@@ -186,7 +203,20 @@ const UserTile = () => {
             <LogoutButton onLogout={userLogout} />
           </li>
         </ul>
-      )) || <LoginButton />}
+      )) || (
+        <ul className={`navbar-nav me-auto ${styles.authbuttons}`}>
+          {pathname != "/auth/login" && (
+            <li>
+              <LoginButton />
+            </li>
+          )}
+          {pathname != "/auth/register" && (
+            <li>
+              <RegisterButton />
+            </li>
+          )}
+        </ul>
+      )}
     </div>
   );
 };

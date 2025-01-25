@@ -38,6 +38,7 @@
   margin-left: auto;
   margin-right: auto;
 }
+
 @media (min-width: 992px) {
   .usertile {
     margin-left: 15px;
@@ -50,5 +51,12 @@
   .userlogin,
   .userlogout {
     margin-top: 0px;
+  }
+  .authbuttons > *:first-child {
+    margin-left: 0px;
+  }
+
+  .authbuttons > * {
+    margin-left: 10px;
   }
 }

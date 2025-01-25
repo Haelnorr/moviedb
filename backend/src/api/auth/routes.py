@@ -14,10 +14,12 @@ from src.api.auth.functions import (
     validate_username_format,
 )
 from src.api.auth.schemas import (
+    CheckUserExistsParams,
     LoginUserParams,
     RegisterUserParams,
     TokenResponse,
     UserDetails,
+    UserExistsSchema,
 )
 from src.api.variables import (
     JWT_ACCESS_EXPIRY,
@@ -58,6 +60,17 @@ def user_identity_lookup(user):
 def user_lookup_callback(_jwt_header, jwt_data):
     identity = jwt_data["sub"]
     return get_user(id=identity)
+
+
+@blp.route("/exists")
+class CheckUserExists(MethodView):
+    @blp.arguments(CheckUserExistsParams, location="json")
+    @blp.response(status_code=200, schema=UserExistsSchema)
+    def post(self, parameters):
+        username = parameters["username"]
+        user = get_user(username)
+        exists = bool(user)
+        return {"exists": exists}
 
 
 @blp.route("/register")

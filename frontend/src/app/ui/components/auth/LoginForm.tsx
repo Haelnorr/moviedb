@@ -3,28 +3,46 @@ import styles from "@/components/auth/styles.module.css";
 import { loginUser } from "@/app/util/api/loginuser";
 import { useLoginFormContext } from "@/contexts/loginform";
 import clsx from "clsx";
+import FormSubmit from "./SubmitButton";
+import FormButtonContainer from "./FormButtonContainer";
+import FormButton from "./LinkButton";
 
 const FormUsername = () => {
-  const { setUsername, errorCredentials, setErrorCredentials } =
-    useLoginFormContext();
+  const {
+    setUsername,
+    errorCredentials,
+    errorUsername,
+    setErrorCredentials,
+    setErrorUsername,
+  } = useLoginFormContext();
   function updateValue(value: string) {
     setUsername(value);
+    setErrorUsername("");
     setErrorCredentials(false);
   }
   return (
-    <div className="mb-3">
-      <label htmlFor="usernameInput" className="form-label">
-        Username
-      </label>
+    <div className="form-floating mb-3">
       <input
         type="text"
         className={clsx("form-control", {
-          "is-invalid": errorCredentials,
+          "is-invalid": errorCredentials || errorUsername,
         })}
         id="usernameInput"
         onChange={(e) => updateValue(e.target.value)}
+        placeholder=""
         required
       />
+      <label htmlFor="usernameInput" className="form-label">
+        Username
+      </label>
+      {errorUsername && (
+        <div
+          id="usernameInputFeedback"
+          className={`invalid-feedback ${styles.error}`}
+        >
+          {errorUsername}
+        </div>
+      )}
     </div>
   );
 };
@@ -37,10 +55,7 @@ const FormPassword = (props: { onKeyDown: Function }) => {
     setErrorCredentials(false);
   }
   return (
-    <div className="mb-3">
-      <label htmlFor="passwordInput" className="form-label">
-        Password
-      </label>
+    <div className="form-floating mb-3">
       <input
         type="password"
         className={clsx("form-control", {
@@ -49,8 +64,12 @@ const FormPassword = (props: { onKeyDown: Function }) => {
         id="passwordInput"
         onChange={(e) => updateValue(e.target.value)}
         onKeyDown={(e) => props.onKeyDown(e.key)}
+        placeholder=""
         required
       />
+      <label htmlFor="passwordInput" className="form-label">
+        Password
+      </label>
       <div
         id="passwordInputFeedback"
         className={`invalid-feedback ${styles.error}`}
@@ -66,30 +85,15 @@ const FormPassword = (props: { onKeyDown: Function }) => {
   );
 };
 
-const FormSubmit = (props: { onLoginClick: Function }) => {
-  return (
-    <button
-      type="button"
-      onClick={() => props.onLoginClick()}
-      className={`btn btn-primary ${styles.button}`}
-    >
-      Login
-    </button>
-  );
-};
-
-const FormButtonContainer = ({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) => {
-  return <div className={styles.buttonwrapper}>{children}</div>;
-};
-
 const LoginForm = (props: { onLogin: Function }) => {
   const context = useLoginFormContext();
 
   async function handleSubmit() {
+    if (!context.username) {
+      context.setErrorUsername("Username is required.");
+      return;
+    }
+
     const { login, error } = await loginUser(
       context.username,
       context.password,
@@ -119,11 +123,13 @@ const LoginForm = (props: { onLogin: Function }) => {
 
   return (
     <div className={styles.wrapper}>
+      <h3 className={styles.header}>Login</h3>
       <form>
         <FormUsername />
         <FormPassword onKeyDown={handlePasswordKeyDown} />
         <FormButtonContainer>
-          <FormSubmit onLoginClick={handleSubmit} />
+          <FormSubmit label="Login" onClick={handleSubmit} />
+          <FormButton label="Register" href="/auth/register" />
         </FormButtonContainer>
       </form>
     </div>

@@ -22,3 +22,11 @@ class TokenResponse(Schema):
     access_expires = fields.Int()
     refresh_token = fields.Str()
     refresh_expires = fields.Int()
+
+
+class CheckUserExistsParams(Schema):
+    username = fields.Str()
+
+
+class UserExistsSchema(Schema):
+    exists = fields.Bool()

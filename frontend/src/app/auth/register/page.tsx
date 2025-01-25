@@ -1,7 +1,7 @@
 "use client";
-import LoginForm from "@/components/auth/LoginForm";
+import RegisterForm from "@/components/auth/RegisterForm";
 import useAuthenticatedUser from "@/app/util/api/userSWR";
-import LoginFormContextProvider from "@/contexts/loginform";
+import RegisterFormContextProvider from "@/contexts/registerform";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
@@ -25,9 +25,9 @@ const LoginPage = () => {
   return (
     <>
       {!user && !loading && (
-        <LoginFormContextProvider>
-          <LoginForm onLogin={mutateAuth} />
-        </LoginFormContextProvider>
+        <RegisterFormContextProvider>
+          <RegisterForm onLogin={mutateAuth} />
+        </RegisterFormContextProvider>
       )}
     </>
   );

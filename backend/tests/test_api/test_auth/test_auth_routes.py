@@ -25,6 +25,15 @@ def test_login(app, client):
         assert bad_response.status_code == 401
 
 
+def test_check_exists(app, client):
+    with app.app_context():
+        response = client.post("/auth/exists", json={"username": "test"})
+        assert response.json["exists"] == True
+
+        response = client.post("/auth/exists", json={"username": "noexist"})
+        assert response.json["exists"] == False
+
+
 def test_register(app, client, user, password):
     with app.app_context():
         # check invalid username format
