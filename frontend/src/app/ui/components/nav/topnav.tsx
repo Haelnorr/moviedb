@@ -113,7 +113,7 @@ const NavSearch = () => {
   );
 };
 
-const LogoutButton = (props: { onLogout: Function }) => {
+const LogoutButton = () => {
   return (
     <>
       <Link
@@ -159,15 +159,35 @@ const RegisterButton = () => {
   );
 };
 
-const UserProfile = (props: { user: User }) => {
+const UserProfile = (props: { user: User; onLogout: Function }) => {
   return (
-    <Link
-      href="#"
-      className={`btn btn-dark btn-outline-info ${styles.userprofile}`}
-      role="button"
-    >
-      {props.user.username}
-    </Link>
+    <div className={`dropdown`}>
+      <a
+        className={`dropdown-toggle btn btn-dark btn-outline-info ${styles.profiledropdown}`}
+        href="#"
+        role="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        {props.user.username}
+      </a>
+      <ul className="dropdown-menu">
+        <li>
+          <Link className="dropdown-item" href="">
+            Profile
+          </Link>
+        </li>
+        <li>
+          <Link
+            className="dropdown-item"
+            href="#"
+            onClick={() => props.onLogout()}
+          >
+            Logout
+          </Link>
+        </li>
+      </ul>
+    </div>
   );
 };
 
@@ -197,10 +217,7 @@ const UserTile = () => {
       {(loggedIn && (
         <ul className="navbar-nav me-auto">
           <li>
-            <UserProfile user={user} />
-          </li>
-          <li>
-            <LogoutButton onLogout={userLogout} />
+            <UserProfile user={user} onLogout={userLogout} />
           </li>
         </ul>
       )) || (

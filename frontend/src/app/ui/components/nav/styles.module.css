@@ -29,7 +29,7 @@
   margin-left: 0px;
 }
 
-.userprofile,
+.profiledropdown,
 .userlogin,
 .userlogout {
   display: block;
@@ -39,11 +39,21 @@
   margin-right: auto;
 }
 
+.profiledropdown {
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.35s ease-in;
+}
+
+.profiledropdown:hover {
+  color: var(--crust);
+}
+
 @media (min-width: 992px) {
   .usertile {
     margin-left: 15px;
   }
-  .userprofile {
+  .profiledropdown {
     display: inline-block;
     margin-right: 5px;
     margin-top: 0px;

@@ -39,14 +39,14 @@ export default function LoginFormContextProvider({
     <LoginFormContext.Provider
       value={{
         username,
-        setUsername,
         password,
+        setUsername,
         setPassword,
         errorUsername,
-        setErrorUsername,
         errorCredentials,
-        setErrorCredentials,
         errorMessage,
+        setErrorUsername,
+        setErrorCredentials,
         setErrorMessage,
       }}
     >
