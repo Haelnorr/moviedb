@@ -6,6 +6,7 @@ import clsx from "clsx";
 import FormSubmit from "./SubmitButton";
 import { checkUsernameExists } from "@/app/util/api/checkusernameexists";
 import { registerUser } from "@/app/util/api/registeruser";
+import FormButton from "./LinkButton";
 
 const FormUsername = () => {
   const { username, setUsername, errorUsername, setErrorUsername } =
@@ -206,6 +207,7 @@ const RegisterForm = (props: { onLogin: Function }) => {
         <FormConfirmPassword onKeyDown={handlePasswordKeyDown} />
         <FormButtonContainer>
           <FormSubmit label="Register" onClick={handleSubmit} />
+          <FormButton label="Login" href="/auth/login" />
         </FormButtonContainer>
       </form>
     </div>

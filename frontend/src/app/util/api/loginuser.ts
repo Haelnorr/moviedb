@@ -28,14 +28,16 @@ export async function loginUser(
   if (login && loginToken) {
     await setCookie("access_token", loginToken.access_token, {
       cookies,
-      secure: true,
+      // TODO: change to use envar so can be set to true for prod
+      secure: false,
       maxAge: loginToken.access_expires,
       sameSite: "lax",
       httpOnly: true,
     });
     await setCookie("refresh_token", loginToken.refresh_token, {
       cookies,
-      secure: true,
+      // TODO: change to use envar so can be set to true for prod
+      secure: false,
       maxAge: loginToken.refresh_expires,
       sameSite: "lax",
       httpOnly: true,

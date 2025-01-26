@@ -113,21 +113,6 @@ const NavSearch = () => {
   );
 };
 
-const LogoutButton = () => {
-  return (
-    <>
-      <Link
-        href="#"
-        className={`btn btn-primary ${styles.userlogout}`}
-        role="button"
-        onClick={() => props.onLogout()}
-      >
-        Logout
-      </Link>
-    </>
-  );
-};
-
 const LoginButton = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -143,6 +128,7 @@ const LoginButton = () => {
     </>
   );
 };
+
 const RegisterButton = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -173,7 +159,7 @@ const UserProfile = (props: { user: User; onLogout: Function }) => {
       </a>
       <ul className="dropdown-menu">
         <li>
-          <Link className="dropdown-item" href="">
+          <Link className="dropdown-item" href="/profile">
             Profile
           </Link>
         </li>

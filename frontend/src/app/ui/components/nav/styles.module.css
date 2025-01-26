@@ -41,7 +41,7 @@
 
 .profiledropdown {
   text-decoration: none;
-  color: var(--text);
+  color: var(--sapphire);
   transition: all 0.35s ease-in;
 }
 

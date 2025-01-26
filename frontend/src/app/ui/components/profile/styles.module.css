@@ -1,0 +1,62 @@
+.profile-byline {
+  margin-bottom: 20px;
+}
+
+.profile-name {
+  font-size: 24px;
+  display: inline-block;
+  vertical-align: middle;
+}
+@media (min-width: 992px) {
+  .profile-name {
+    font-size: 36px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+.profile-role-tag {
+  display: inline-block;
+  vertical-align: middle;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  padding: 2px 5px 2px 5px;
+  margin-left: 15px;
+  line-height: 100%;
+}
+
+.profile-role-tag-admin {
+  color: var(--red);
+  border-color: var(--red);
+}
+
+.profile-joined {
+  display: inline-block;
+  margin-left: 15px;
+  vertical-align: middle;
+  color: var(--overlay0);
+  text-wrap: wrap;
+}
+
+.profile-bio {
+  font-size: 14px;
+  vertical-align: top;
+  color: var(--overlay1);
+}
+
+.favourites-title,
+.activity-title {
+  font-weight: bold;
+  font-size: 18px;
+  text-decoration: underline;
+  text-decoration-color: var(--surface2);
+}
+
+.favourites-content {
+  list-style: none;
+  padding-left: 5px;
+}
+
+.activity-content {
+  list-style: none;
+}

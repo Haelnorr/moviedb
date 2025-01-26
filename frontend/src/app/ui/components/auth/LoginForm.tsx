@@ -5,6 +5,7 @@ import { useLoginFormContext } from "@/contexts/loginform";
 import clsx from "clsx";
 import FormSubmit from "./SubmitButton";
 import FormButtonContainer from "./FormButtonContainer";
+import FormButton from "./LinkButton";
 const FormUsername = (props: { onKeyDown: Function }) => {
   const {
     setUsername,
@@ -128,6 +129,7 @@ const LoginForm = (props: { onLogin: Function }) => {
         <FormPassword onKeyDown={handlePasswordKeyDown} />
         <FormButtonContainer>
           <FormSubmit label="Login" onClick={handleSubmit} />
+          <FormButton label="Register" href="/auth/register" />
         </FormButtonContainer>
       </form>
     </div>

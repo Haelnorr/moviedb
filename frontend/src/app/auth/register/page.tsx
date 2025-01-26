@@ -23,13 +23,13 @@ const LoginPage = () => {
   }, [user, loggedIn, router]);
 
   return (
-    <>
+    <div className="container">
       {!user && !loading && (
         <RegisterFormContextProvider>
           <RegisterForm onLogin={mutateAuth} />
         </RegisterFormContextProvider>
       )}
-    </>
+    </div>
   );
 };
 
