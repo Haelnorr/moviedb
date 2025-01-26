@@ -15,7 +15,7 @@ def validate_username_format(username):
 
 
 def check_username_exists(username):
-    query = sa.Select(User).where(User.username.is_(username))
+    query = sa.Select(User).where(User.username.ilike(username))
     return bool(db.session.scalars(query).first())
 
 
@@ -29,7 +29,7 @@ def create_new_user(username, password):
 
 def get_user(username=None, id=None):
     if username:
-        query = sa.select(User).where(User.username.is_(username))
+        query = sa.select(User).where(User.username.ilike(username))
     elif id:
         query = sa.select(User).where(User.id.is_(id))
     else:

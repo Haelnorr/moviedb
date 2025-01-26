@@ -68,7 +68,7 @@ class CheckUserExists(MethodView):
     @blp.response(status_code=200, schema=UserExistsSchema)
     def post(self, parameters):
         username = parameters["username"]
-        user = get_user(username)
+        user = check_username_exists(username)
         exists = bool(user)
         return {"exists": exists}
 

@@ -7,7 +7,7 @@ import FormSubmit from "./SubmitButton";
 import FormButtonContainer from "./FormButtonContainer";
 import FormButton from "./LinkButton";
 
-const FormUsername = () => {
+const FormUsername = (props: { onKeyDown: Function }) => {
   const {
     setUsername,
     errorCredentials,
@@ -29,6 +29,7 @@ const FormUsername = () => {
         })}
         id="usernameInput"
         onChange={(e) => updateValue(e.target.value)}
+        onKeyDown={(e) => props.onKeyDown(e.key)}
         placeholder=""
         required
       />
@@ -125,7 +126,7 @@ const LoginForm = (props: { onLogin: Function }) => {
     <div className={styles.wrapper}>
       <h3 className={styles.header}>Login</h3>
       <form>
-        <FormUsername />
+        <FormUsername onKeyDown={handlePasswordKeyDown} />
         <FormPassword onKeyDown={handlePasswordKeyDown} />
         <FormButtonContainer>
           <FormSubmit label="Login" onClick={handleSubmit} />
