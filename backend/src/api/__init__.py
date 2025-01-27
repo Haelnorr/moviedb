@@ -27,6 +27,7 @@ def create_app(test_config=None):
     api = Api(app)
 
     db.init_app(app)
+
     migrate.init_app(app, db)
     cors.init_app(app)
     jwt.init_app(app)

@@ -10,6 +10,23 @@ dev_db = os.path.join(path, "data.sqlite")
 database_file = os.getenv("DATABASE", dev_db)
 
 
+postgres_user = os.getenv("POSTGRES_USER")
+postgres_pass = os.getenv("POSTGRES_PASS")
+postgres_host = os.getenv("POSTGRES_HOST")
+postgres_port = os.getenv("POSTGRES_PORT")
+postgres_ssl_mode = os.getenv("POSTGRES_SSL_MODE")
+postgres_endpoint_id = os.getenv("POSTGRES_ENDPOINT")
+
+if postgres_port:  # pragma: no cover
+    postgres_host = f"{postgres_host}:{postgres_port}"
+
+base_db_url = f"postgresql://{postgres_user}:{postgres_pass}@{postgres_host}/(database)?sslmode={postgres_ssl_mode}"
+if postgres_endpoint_id:  # pragma: no cover
+    base_db_url = base_db_url + f"&options=endpoint%3D{postgres_endpoint_id}"
+
+moviedb_url = base_db_url.replace("(database)", "moviedb")
+
+
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY")
     API_TITLE = "MovieDB API"
@@ -32,6 +49,7 @@ class Config:
     OPENAPI_SWAGGER_UI_PATH = "/docs"
     OPENAPI_SWAGGER_UI_URL = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
 
-    SQLALCHEMY_DATABASE_URI = f"sqlite:///{database_file}"
+    SQLALCHEMY_DATABASE_URI = moviedb_url
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLACHEMY_ECHO = True
+    SQLALCHEMY_ENGINE_OPTIONS = {"pool_size": 0, "pool_pre_ping": True}

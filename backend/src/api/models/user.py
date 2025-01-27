@@ -1,4 +1,5 @@
-from typing import Optional
+from datetime import datetime, timezone
+from typing import TYPE_CHECKING, Optional
 
 import sqlalchemy as sa
 import sqlalchemy.orm as so
@@ -8,11 +9,20 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from src.api import db
 from src.api.variables import JWT_ACCESS_EXPIRY, JWT_REFRESH_EXPIRY
 
+if TYPE_CHECKING:
+    from src.api.models import Role
+
 
 class User(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     username: so.Mapped[str] = so.mapped_column(sa.String(64), index=True, unique=True)
-    password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
+    password_hash: so.Mapped[str | None] = so.mapped_column(sa.String(256))
+    bio: so.Mapped[str | None] = so.mapped_column(sa.String(128))
+    joined: so.Mapped[datetime] = so.mapped_column(
+        index=True, default=lambda: datetime.now(timezone.utc)
+    )
+    role_id: so.Mapped[int | None] = so.mapped_column(sa.ForeignKey("role.id"))
+    role: so.Mapped[Optional["Role"]] = so.relationship(back_populates="users")
 
     def __repr__(self):
         return f"<User {self.username}>"

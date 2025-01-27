@@ -31,7 +31,7 @@ def get_user(username=None, id=None):
     if username:
         query = sa.select(User).where(User.username.ilike(username))
     elif id:
-        query = sa.select(User).where(User.id.is_(id))
+        query = sa.select(User).where(User.id == id)
     else:
         return
     user = db.session.scalars(query).first()

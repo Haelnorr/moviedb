@@ -15,7 +15,7 @@ def app():
     app = create_app(
         {
             "TESTING": True,
-            "SQLALCHEMY_DATABASE_URI": f"sqlite:///{db_path}",
+            "SQLALCHEMY_DATABASE_URI": "postgresql://user:password@127.0.0.1:5433/moviedb",
         }
     )
     with app.app_context():

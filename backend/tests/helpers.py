@@ -22,7 +22,9 @@ def response_is_jwt(jwt):
 
 
 def get_user_tokens(fresh=True):
-    user = db.session.scalars(sa.Select(User).where(User.username.is_("test"))).first()
+    user = db.session.scalars(
+        sa.Select(User).where(User.username.ilike("test"))
+    ).first()
     if not user:
         return
     tokens = user.generate_tokens(fresh)

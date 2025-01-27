@@ -64,7 +64,7 @@ def test_create_new_user(app):
         with pytest.raises(Exception) as e:
             create_new_user("noexist", "password")
 
-        assert "(sqlite3.IntegrityError) UNIQUE" in str(e)
+        assert "UniqueViolation" in str(e)
 
 
 def test_get_user(app):
