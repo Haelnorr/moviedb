@@ -2,6 +2,11 @@ import { User } from "@/util/types";
 import styles from "./styles.module.css";
 import Link from "next/link";
 
+const profileLinks = [
+  { label: "Profile", href: "/profile" },
+  { label: "Settings", href: "/account/overview" },
+];
+
 const UserProfile = (props: { user: User; onLogout: Function }) => {
   return (
     <div className={`dropdown`}>
@@ -15,12 +20,14 @@ const UserProfile = (props: { user: User; onLogout: Function }) => {
         {props.user.username}
       </a>
       <ul className="dropdown-menu">
-        <li>
-          <Link className="dropdown-item" href="/profile">
-            Profile
-          </Link>
-        </li>
-        <li>
+        {profileLinks.map((link, index) => (
+          <li key={`profile-dropdown-${index}`}>
+            <Link className="dropdown-item" href={link.href}>
+              {link.label}
+            </Link>
+          </li>
+        ))}
+        <li key="profile-dropdown-logout">
           <Link
             className="dropdown-item"
             href="#"
