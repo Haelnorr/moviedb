@@ -1,2 +1,3 @@
+#!/bin/bash
 ./runtest
 coverage html --skip-covered --skip-empty
