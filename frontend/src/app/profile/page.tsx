@@ -1,8 +1,17 @@
+"use client";
 import styles from "@/components/profile/styles.module.css";
-const user = {
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import useAuthenticatedUser from "@/util/api/userSWR";
+import { useEffect } from "react";
+import { loginRedirectPath } from "@/util/api/loginredirect";
+import ProfileHeader from "@/components/profile/profileHeader";
+import ProfileByline from "@/components/profile/profileByline";
+import ProfileFavourites from "@/components/profile/profileFavourites";
+import ProfileActivity from "@/components/profile/profileActivity";
+const fakeUser = {
   id: 1,
   username: "Haelnorr",
-  joined: "2025-01-15T11:45:00",
+  joined: new Date("2025-01-15T11:45:00"),
   role: "admin",
   bio: "Only thing I love more than movies, is talking about movies",
   favourites: [
@@ -31,82 +40,33 @@ const user = {
   ],
 };
 
-// TODO: generalize function and move to separate file
-const joined = new Date(user.joined);
-const joinedFormatted = new Intl.DateTimeFormat("en-GB", {
-  day: "2-digit",
-  month: "short",
-  year: "numeric",
-}).format(joined);
-
-// TODO: move to separate file
-const ProfileHeader = () => {
-  return (
-    <div className="col">
-      <span className={styles["profile-name"]}>{user.username}</span>
-      <span
-        className={`${styles["profile-role-tag"]} ${styles[`profile-role-tag-${user.role}`]}`}
-      >
-        {user.role}
-      </span>
-      <span className={styles["profile-joined"]}>Joined {joinedFormatted}</span>
-    </div>
-  );
-};
-
-// TODO: move to separate file
-const ProfileByline = () => {
-  return (
-    <div className="col">
-      <span className={styles["profile-bio"]}>{user.bio}</span>
-    </div>
-  );
-};
-
-// TODO: move to separate file
-const ProfileFavourites = () => {
-  return (
-    <>
-      <span className={styles["favourites-title"]}>Favourites</span>
-      <ul className={styles["favourites-content"]}>
-        {user.favourites.map((movie, index) => {
-          return <li key={`favourites-${index}`}>{movie}</li>;
-        })}
-      </ul>
-    </>
-  );
-};
-
-// TODO: move to separate file
-const ProfileActivity = () => {
-  return (
-    <>
-      <span className={styles["activity-title"]}>Activity</span>
-      <ul className={styles["activity-content"]}>
-        {user.activity.map((movie, index) => {
-          return <li key={`activity-${index}`}>{movie}</li>;
-        })}
-      </ul>
-    </>
-  );
-};
-
 const ProfilePage = () => {
-  // TODO: fetch user data from backend
+  // TODO: redo profile setup to use layout to support viewing other users
+  // TODO: replace fakeUser with user data when backend is updated
+  const router = useRouter();
+  const { user, loading } = useAuthenticatedUser();
+  const loggedOut = !user && !loading;
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    if (loggedOut) {
+      router.push(loginRedirectPath("login", pathname, searchParams));
+    }
+  }, [user, loggedOut, router]);
   return (
     <div className="container">
       <div className="row">
-        <ProfileHeader />
+        <ProfileHeader user={fakeUser} />
       </div>
       <div className={`row ${styles["profile-byline"]}`}>
-        <ProfileByline />
+        <ProfileByline user={fakeUser} />
       </div>
       <div className="row">
         <div className="col-md-4">
-          <ProfileFavourites />
+          <ProfileFavourites user={fakeUser} />
         </div>
         <div className="col-md-8">
-          <ProfileActivity />
+          <ProfileActivity user={fakeUser} />
         </div>
       </div>
     </div>

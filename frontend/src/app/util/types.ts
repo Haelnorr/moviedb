@@ -8,4 +8,9 @@ export type Token = {
 export type User = {
   id: number;
   username: string;
+  joined: Date;
+  role: string;
+  bio: string;
+  favourites: any[];
+  activity: any[];
 };
