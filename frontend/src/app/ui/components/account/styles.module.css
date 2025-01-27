@@ -1,0 +1,49 @@
+.account-nav-panel {
+  background-color: var(--crust);
+  border-radius: 8px;
+  max-width: 300px;
+  margin-bottom: 20px;
+  font-size: 18px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  text-decoration: underline;
+  text-decoration-color: var(--overlay0);
+}
+
+.account-nav-panel-item {
+  display: none;
+}
+
+.account-nav-panel-link {
+  color: var(--text);
+}
+.active {
+  background-color: var(--surface0);
+  border-radius: 8px;
+}
+.showdropdown {
+  display: block;
+}
+@media (min-width: 768px) {
+  .account-nav-panel {
+    font-size: 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .account-nav-panel-item {
+    display: block;
+    transition: all 0.2s ease-out;
+    line-height: 23px;
+  }
+  .account-nav-panel-item:hover {
+    background-color: var(--surface0);
+    transition: all 0.2s ease-in;
+    font-size: 18px;
+  }
+  .active {
+    background-color: var(--surface0);
+    font-size: 18px;
+    border-radius: 0;
+  }
+}
