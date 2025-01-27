@@ -52,4 +52,10 @@ class User(db.Model):
         }
 
     def json(self):
-        return {"id": self.id, "username": self.username}
+        return {
+            "id": self.id,
+            "username": self.username,
+            "bio": self.bio,
+            "joined": self.joined,
+            "role": self.role.name if self.role else "",
+        }

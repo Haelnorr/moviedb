@@ -2,7 +2,18 @@ import { User } from "@/app/util/types";
 import styles from "./styles.module.css";
 const ProfileFavourites = (props: { user: User }) => {
   // TODO: get favourites from backend using user as input query
-  const favourites = props.user.favourites;
+  const favourites = [
+    "Arrival",
+    "Colombus",
+    "Howl's Moving Castle",
+    "Incendies",
+    "Manchester by the Sea",
+    "Moneyball",
+    "No Country for Old Men",
+    "Tenet",
+    "The Grand Budapest Hotel",
+    "The Secret Life of Walter Mitty",
+  ];
   return (
     <>
       <span className={styles["favourites-title"]}>Favourites</span>

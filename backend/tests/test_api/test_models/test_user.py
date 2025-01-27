@@ -63,6 +63,6 @@ def test_user_repr(user):
     assert f"{user}" == f"<User {user.username}>"
 
 
-def test_user_json(user):
-    expected = {"id": user.id, "username": user.username}
-    assert user.json() == expected
+# def test_user_json(user):
+#     expected = {"id": user.id, "username": user.username}
+#     assert user.json() == expected

@@ -89,7 +89,14 @@ def test_check_current_user_logout(app, client):
         user = get_user("test")
         if not user:
             assert False
-        assert response.json == user.json()
+        expected_response = {
+            "id": 1,
+            "username": "test",
+            "bio": "This is a bio",
+            "joined": "2025-01-15T11:45:00",
+            "role": "admin",
+        }
+        assert response.json == expected_response
 
         response = client.get("/auth/@me", headers=get_headers(tokens["refresh"]))
         assert response.status_code == 422

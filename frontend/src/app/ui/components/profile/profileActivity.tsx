@@ -3,7 +3,18 @@ import styles from "./styles.module.css";
 const ProfileActivity = (props: { user: User }) => {
   // TODO: query user activity from backend using user as input query
 
-  const activity = props.user.activity;
+  const activity = [
+    "The Negotiator",
+    "Die Hard",
+    "Just Mercy",
+    "Anora",
+    "Snack Shack",
+    "Point Break",
+    "The Judge",
+    "Beginners",
+    "She Said",
+    "Up in the Air",
+  ];
   return (
     <>
       <span className={styles["activity-title"]}>Activity</span>

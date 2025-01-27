@@ -15,6 +15,9 @@ class LoginUserParams(Schema):
 class UserDetails(Schema):
     id = fields.Int()
     username = fields.Str()
+    bio = fields.Str()
+    joined = fields.DateTime()
+    role = fields.Str()
 
 
 class TokenResponse(Schema):
