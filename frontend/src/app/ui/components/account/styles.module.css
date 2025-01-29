@@ -25,6 +25,66 @@
 .showdropdown {
   display: block;
 }
+.account-content-title {
+  font-size: 28px;
+  text-align: center;
+  display: block;
+}
+.account-content-container {
+  padding-top: 20px;
+  width: fit-content;
+}
+.account-settings-table td {
+  padding-bottom: 1em;
+  vertical-align: top;
+}
+.account-settings-labels {
+  padding-top: 6px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin-left: auto;
+  margin-right: auto;
+}
+.text-input {
+  max-width: 230px;
+  margin-bottom: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: var(--mantle);
+}
+.textarea-container {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.textarea-input {
+  max-width: 310px;
+  min-width: 250px;
+  height: 100px;
+  margin-bottom: 5px;
+  background-color: var(--mantle);
+}
+.buttonwrapper {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.focus-only-button {
+  margin-left: 5px;
+  transition: all 0.5s ease-in;
+}
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.5s ease-out;
+}
+.disabled {
+  display: none;
+}
+.textarea-char-count {
+  display: none;
+}
 @media (min-width: 768px) {
   .account-nav-panel {
     font-size: 16px;
@@ -45,5 +105,38 @@
     background-color: var(--surface0);
     font-size: 18px;
     border-radius: 0;
+  }
+  .account-content-wrapper {
+    margin-left: 20px;
+  }
+  .account-content-title {
+    text-align: left;
+    display: inline;
+  }
+  .account-content-container {
+    width: auto;
+  }
+  .account-settings-labels {
+    text-align: left;
+    margin: 0;
+  }
+  .textarea-char-count {
+    float: right;
+    margin-right: 5px;
+    display: block;
+  }
+  .text-input {
+    margin: 0px;
+  }
+  .textarea-container {
+    margin: 0;
+  }
+  .textarea-input {
+    width: 350px;
+  }
+  .buttonwrapper {
+    width: auto;
+    margin-top: 5px;
+    margin-bottom: 10px;
   }
 }

@@ -48,6 +48,7 @@ const FormUsername = () => {
           onChange={(e) => validateInput(e.target)}
           onBlur={checkUsername}
           placeholder=""
+          maxLength={64}
           required
         />
         <label htmlFor="usernameInput">Username</label>

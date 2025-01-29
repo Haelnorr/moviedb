@@ -7,6 +7,7 @@ type AuthenticatedUserSWR = {
   user: User | undefined;
   mutateAuth: KeyedMutator<any>;
   loading: boolean;
+  isFresh: boolean;
 };
 
 export default function useAuthenticatedUser(): AuthenticatedUserSWR {
@@ -17,6 +18,7 @@ export default function useAuthenticatedUser(): AuthenticatedUserSWR {
   const loading = !data && !error;
 
   var user: User | undefined;
+  var isFresh = false;
 
   if (!loading && !error) {
     if (data!.error) {
@@ -32,11 +34,13 @@ export default function useAuthenticatedUser(): AuthenticatedUserSWR {
       }
     } else {
       user = data!.response;
+      if (user!.fresh === "True") isFresh = true;
     }
   }
   return {
     user: user,
     mutateAuth: mutate,
     loading: loading,
+    isFresh: isFresh,
   };
 }

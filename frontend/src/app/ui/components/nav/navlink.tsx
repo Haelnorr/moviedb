@@ -2,7 +2,7 @@
 import Link from "next/link";
 import styles from "./styles.module.css";
 import { usePathname } from "next/navigation";
-import { NavLinkData } from "./navitems";
+import { NavLinkData } from "./navlist";
 import clsx from "clsx";
 
 const NavLink = (props: { link: NavLinkData }) => {

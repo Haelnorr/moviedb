@@ -1,4 +1,4 @@
-import { NavLinkData } from "./navitems";
+import { NavLinkData } from "./navlist";
 
 const NavDropdown = (props: { link: NavLinkData }) => {
   return (

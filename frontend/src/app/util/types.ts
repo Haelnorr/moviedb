@@ -13,4 +13,5 @@ export type User = {
   bio: string;
   favourites: any[];
   activity: any[];
+  fresh?: string;
 };

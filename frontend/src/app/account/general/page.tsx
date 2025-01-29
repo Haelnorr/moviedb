@@ -1,11 +1,13 @@
 "use client";
+import BioUpdateForm from "@/app/ui/components/account/bioUpdateForm";
+import UsernameUpdateForm from "@/app/ui/components/account/usernameUpdateForm";
 import { loginRedirectPath } from "@/app/util/api/loginredirect";
 import useAuthenticatedUser from "@/app/util/api/userSWR";
 import styles from "@/components/account/styles.module.css";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-const AccountSecurity = () => {
+const AccountGeneral = () => {
   const router = useRouter();
   const { user, loading, mutateAuth, isFresh } = useAuthenticatedUser();
   const loggedOut = !user && !loading;
@@ -20,19 +22,38 @@ const AccountSecurity = () => {
     <>
       {!loggedOut && (
         <div className={styles["account-content-wrapper"]}>
-          <span className={styles["account-content-title"]}>Security</span>
+          <span className={styles["account-content-title"]}>General</span>
           {!loading && (
             <div className={`container ${styles["account-content-container"]}`}>
               <div className="row">
                 <div
                   className={`col-md-2 ${styles["account-settings-labels"]}`}
                 >
-                  Change Password
+                  Username
                 </div>
                 <div
                   className={`col-md-8 ${styles["account-settings-content"]}`}
                 >
-                  change password form
+                  <UsernameUpdateForm
+                    currentUsername={user!.username}
+                    onChanged={mutateAuth}
+                    isFresh={isFresh}
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div
+                  className={`col-md-2 ${styles["account-settings-labels"]}`}
+                >
+                  Bio
+                </div>
+                <div
+                  className={`col-md-8 ${styles["account-settings-content"]}`}
+                >
+                  <BioUpdateForm
+                    currentBio={user!.bio}
+                    onChanged={mutateAuth}
+                  />
                 </div>
               </div>
             </div>
@@ -42,4 +63,4 @@ const AccountSecurity = () => {
     </>
   );
 };
-export default AccountSecurity;
+export default AccountGeneral;

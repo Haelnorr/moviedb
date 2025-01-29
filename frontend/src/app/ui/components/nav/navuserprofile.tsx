@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const profileLinks = [
   { label: "Profile", href: "/profile" },
-  { label: "Settings", href: "/account/overview" },
+  { label: "Settings", href: "/account" },
 ];
 
 const UserProfile = (props: { user: User; onLogout: Function }) => {

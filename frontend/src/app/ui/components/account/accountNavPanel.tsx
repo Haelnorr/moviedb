@@ -6,7 +6,7 @@ import clsx from "clsx";
 import { useState } from "react";
 
 const links = [
-  { name: "Overview", href: "/account/overview" },
+  { name: "General", href: "/account/general" },
   { name: "Security", href: "/account/security" },
   { name: "Preferences", href: "/account/preferences" },
 ];

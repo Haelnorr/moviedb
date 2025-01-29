@@ -26,18 +26,17 @@ export async function loginUser(
       }
     });
   if (login && loginToken) {
+    const cookieSecureMode: boolean = process.env.COOKIE_SECURE_MODE === "true";
     await setCookie("access_token", loginToken.access_token, {
       cookies,
-      // TODO: change to use envar so can be set to true for prod
-      secure: false,
+      secure: cookieSecureMode,
       maxAge: loginToken.access_expires,
       sameSite: "lax",
       httpOnly: true,
     });
     await setCookie("refresh_token", loginToken.refresh_token, {
       cookies,
-      // TODO: change to use envar so can be set to true for prod
-      secure: false,
+      secure: cookieSecureMode,
       maxAge: loginToken.refresh_expires,
       sameSite: "lax",
       httpOnly: true,

@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 function accountRedirect(request: NextRequest) {
   if (request.nextUrl.pathname === accountMiddleware.matcher) {
-    return NextResponse.redirect(new URL("/account/overview", request.url));
+    return NextResponse.redirect(new URL("/account/general", request.url));
   }
 }
 
