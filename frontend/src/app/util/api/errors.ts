@@ -20,7 +20,6 @@ export function apiErrorAsValue(err: Error) {
     error = `Unhandled API Error: ${err.message}`;
   } else {
     error = "Unknown";
-    console.error(err);
   }
   return error;
 }

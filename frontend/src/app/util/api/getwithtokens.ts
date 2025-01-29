@@ -4,6 +4,8 @@ import { deleteCookie, getCookie } from "cookies-next";
 import { apiErrorAsValue } from "@/util/api/errors";
 import { cookies } from "next/headers";
 import { refreshTokens } from "@/util/api/refreshtokens";
+import { logger } from "@/lib/logger";
+const log = logger.child({ file: "util/api/getwithtokens.ts" });
 
 // Make an get request to the backend api with the user tokens
 // automatically performs refresh token check and updates tokens if valid
@@ -11,16 +13,22 @@ export const apiGetWithTokens = async (
   endpoint: string,
 ): Promise<{ response: any; error: string | undefined }> => {
   var error;
+  log.debug("Getting user access cookie");
   var accessToken = await getCookie("access_token", { cookies });
   if (!accessToken) {
+    log.debug("No access token, getting refresh cookie");
     const refreshToken = await getCookie("refresh_token", { cookies });
     if (!refreshToken) {
+      log.debug("No refresh token, user is Unauthorized");
       error = "Unauthorized";
     } else {
+      log.debug("Refresh token present, requesting new tokens");
       var { refreshError } = await refreshTokens(refreshToken);
       if (refreshError) {
         error = refreshError;
+        log.info({ error: error }, "Error refreshing tokens");
       } else {
+        log.debug("Tokens refreshed, getting new access cookie");
         accessToken = await getCookie("access_token", { cookies });
       }
     }
@@ -30,18 +38,23 @@ export const apiGetWithTokens = async (
   // then error will be set and we can skip authenticating with the backend
   var response;
   if (!error) {
+    log.debug("Retreived access token from cookies, requesting authorization");
     response = await apiGet(endpoint, accessToken)
       .catch((err) => {
         error = apiErrorAsValue(err);
+        log.info({ error: error }, "Error occured authorizing user");
       })
       .then((res) => {
-        if (res) return res.data;
+        if (res) {
+          log.debug({ user: res.data }, "User authorized successfully");
+          return res.data;
+        }
       });
   }
   if (error && error === "Unauthorized") {
-    // access and refresh tokens have been tried if they exist, and
-    // the backend has rejected them. delete the cookies so further
-    // calls to this SWT dont result in more api requests
+    log.debug(
+      "User authorization was rejected by the server or cookies were not found",
+    );
     await deleteCookie("access_token", { cookies });
     await deleteCookie("refresh_token", { cookies });
   }

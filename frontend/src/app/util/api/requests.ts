@@ -1,4 +1,7 @@
+"use server";
 import axios, { AxiosError } from "axios";
+import { logger } from "@/lib/logger";
+const log = logger.child({ file: "util/api/requests.ts" });
 import {
   APIError,
   BadRequest,
@@ -16,6 +19,10 @@ const apiURI = process.env.API_URL;
 function handleError(err: AxiosError) {
   if (err) {
     if (err.code === "ECONNREFUSED" || err.code === "ERR_NETWORK") {
+      log.error(
+        { error: err },
+        "A request was made to the backend but it could not be reached",
+      );
       throw new ServiceUnavailable();
     } else if (err.response) {
       switch (err.response.status) {
@@ -32,11 +39,23 @@ function handleError(err: AxiosError) {
         case 422:
           throw new UnprocessableContent();
         case 500:
+          log.warn(
+            { error: err.response },
+            "A request was made to the backend that resulted in an Internal server error.",
+          );
           throw new InternalServerError();
         default:
+          log.warn(
+            { error: err.response },
+            "A request was made to the backend that resulted in an unhandled API error",
+          );
           throw new APIError(`Unhandled: ${err.response}`);
       }
     } else {
+      log.warn(
+        { error: err },
+        "A request was made to the backend that resulted in an unhandled error",
+      );
       throw err;
     }
   }
