@@ -32,11 +32,13 @@ def create_app(test_config=None):
     cors.init_app(app)
     jwt.init_app(app)
 
+    from src.api.account import bp as account_bp
     from src.api.auth import bp as auth_bp
     from src.api.movies import bp as movies_bp
 
-    api.register_blueprint(movies_bp)
     api.register_blueprint(auth_bp)
+    api.register_blueprint(account_bp)
+    api.register_blueprint(movies_bp)
 
     @app.route("/isalive")
     def isalive():

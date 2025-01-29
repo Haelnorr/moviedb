@@ -19,7 +19,7 @@ from src.api.auth.schemas import (
     RegisterUserParams,
     TokenResponse,
     UserDetails,
-    UserExistsSchema,
+    UserExists,
 )
 from src.api.variables import (
     JWT_ACCESS_EXPIRY,
@@ -65,7 +65,7 @@ def user_lookup_callback(_jwt_header, jwt_data):
 @blp.route("/exists")
 class CheckUserExists(MethodView):
     @blp.arguments(CheckUserExistsParams, location="json")
-    @blp.response(status_code=200, schema=UserExistsSchema)
+    @blp.response(status_code=200, schema=UserExists)
     def post(self, parameters):
         username = parameters["username"]
         user = check_username_exists(username)
@@ -83,6 +83,8 @@ class Register(MethodView):
         password = parameters["password"]
         confirm_password = parameters["confirm_password"]
 
+        if len(username) > 64:
+            abort(400, message="Username too long")
         if not validate_username_format(username):
             abort(400, message="Username contains invalid characters")
         if check_username_exists(username):
@@ -143,14 +145,3 @@ class RevokeTokens(MethodView):
         ttype = token["type"]
         ttl = {"access": JWT_ACCESS_EXPIRY, "refresh": JWT_REFRESH_EXPIRY}
         jwt_redis_blocklist.set(jti, "", ex=ttl[ttype])
-
-
-# TODO: change password
-# TODO: token freshness pattern
-# https://flask-jwt-extended.readthedocs.io/en/stable/refreshing_tokens.html#token-freshness-pattern
-@blp.route("/change_password")
-class ChangePassword(MethodView):
-    @blp.doc(**JWT_AUTH_REQ)
-    @jwt_required(fresh=True)
-    def put(self):
-        pass

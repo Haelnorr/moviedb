@@ -76,6 +76,17 @@ def test_register(app, client, user, password):
             },
         )
         assert response.status_code == 400
+        # check username longer than 64 characters fails
+        long_username = "a" * 65
+        response = client.post(
+            "/auth/register",
+            json={
+                "username": long_username,
+                "password": password,
+                "confirm_password": password,
+            },
+        )
+        assert response.status_code == 400
 
 
 def test_check_current_user_logout(app, client):
@@ -126,16 +137,3 @@ def test_refresh_tokens(app, client):
 
         response = client.post("/auth/refresh", headers=get_headers(tokens["refresh"]))
         assert response.status_code == 401
-
-
-def test_change_password(app, client):
-    with app.app_context():
-        tokens = get_user_tokens()
-        if not tokens:
-            assert False
-
-        with pytest.raises(TypeError) as e:
-            response = client.put(
-                "/auth/change_password", headers=get_headers(tokens["access"])
-            )
-        assert "returned None" in str(e.value)

@@ -1,15 +1,21 @@
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, validate
 
 
 class RegisterUserParams(Schema):
-    username = fields.Str()
-    password = fields.Str()
-    confirm_password = fields.Str()
+    username = fields.Str(
+        required=True, metadata={"validator": validate.Length(max=64, min=1)}
+    )
+    password = fields.Str(required=True)
+    confirm_password = fields.Str(required=True)
 
 
 class LoginUserParams(Schema):
-    username = fields.Str()
-    password = fields.Str()
+    username = fields.Str(required=True)
+    password = fields.Str(required=True)
+
+
+class CheckUserExistsParams(Schema):
+    username = fields.Str(required=True)
 
 
 class UserDetails(Schema):
@@ -27,9 +33,5 @@ class TokenResponse(Schema):
     refresh_expires = fields.Int()
 
 
-class CheckUserExistsParams(Schema):
-    username = fields.Str()
-
-
-class UserExistsSchema(Schema):
+class UserExists(Schema):
     exists = fields.Bool()
