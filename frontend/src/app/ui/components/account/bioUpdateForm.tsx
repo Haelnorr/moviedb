@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 const BioUpdateForm = (props: { currentBio: string; onChanged: Function }) => {
   const [changed, setChanged] = useState(false);
-  const [newBio, setNewBio] = useState(props.currentBio);
+  const [newBio, setNewBio] = useState(props.currentBio || "");
   function handleInput(value: string) {
     if (value.length <= 128) {
       setNewBio(value);
@@ -12,7 +12,7 @@ const BioUpdateForm = (props: { currentBio: string; onChanged: Function }) => {
     }
   }
   function resetInput() {
-    setNewBio(props.currentBio);
+    setNewBio(props.currentBio || "");
     setChanged(false);
   }
   function handleSave() {
