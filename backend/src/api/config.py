@@ -1,6 +1,10 @@
 import os
 from pathlib import Path
 
+from src.logger.logger import get_logger
+
+log = get_logger(__name__)
+
 # Get directory of this file
 path = os.path.dirname(os.path.abspath(__file__))
 # Go up to project root
@@ -24,7 +28,13 @@ base_db_url = f"postgresql://{postgres_user}:{postgres_pass}@{postgres_host}/(da
 if postgres_endpoint_id:  # pragma: no cover
     base_db_url = base_db_url + f"&options=endpoint%3D{postgres_endpoint_id}"
 
-moviedb_url = base_db_url.replace("(database)", "moviedb")
+DATABASE_NAME = "moviedb"
+moviedb_url = base_db_url.replace("(database)", DATABASE_NAME)
+
+logsafe_url = f"postgresql://[username]:[password]@{postgres_host}/(database)?sslmode={postgres_ssl_mode}"
+logsafe_url = logsafe_url.replace("(database)", DATABASE_NAME)
+log.debug(f"Database connection configured as: {logsafe_url}")
+log.debug("(Username and password have been obscured for security)")
 
 
 class Config:

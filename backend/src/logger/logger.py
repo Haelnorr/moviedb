@@ -18,6 +18,7 @@ DEFAULT_LOG_DIR = os.path.join(path, "logs")
 def get_level(level):
     return {
         "notset": 0,
+        "trace": 5,
         "debug": 10,
         "info": 20,
         "warn": 30,
