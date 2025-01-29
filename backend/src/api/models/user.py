@@ -51,11 +51,12 @@ class User(db.Model):
             "refresh_expires": JWT_REFRESH_EXPIRY.total_seconds(),
         }
 
-    def json(self):
+    def json(self, fresh=None):
         return {
             "id": self.id,
             "username": self.username,
             "bio": self.bio,
             "joined": self.joined,
             "role": self.role.name if self.role else "",
+            "fresh": fresh,
         }

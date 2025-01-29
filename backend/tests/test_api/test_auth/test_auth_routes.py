@@ -91,7 +91,7 @@ def test_register(app, client, user, password):
 
 def test_check_current_user_logout(app, client):
     with app.app_context():
-        tokens = get_user_tokens()
+        tokens = get_user_tokens(fresh=True)
         if not tokens:
             assert False
 
@@ -106,6 +106,7 @@ def test_check_current_user_logout(app, client):
             "bio": "This is a bio",
             "joined": "2025-01-15T11:45:00",
             "role": "admin",
+            "fresh": "True",
         }
         assert response.json == expected_response
 

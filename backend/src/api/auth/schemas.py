@@ -24,6 +24,7 @@ class UserDetails(Schema):
     bio = fields.Str()
     joined = fields.DateTime()
     role = fields.Str()
+    fresh = fields.Str(required=False)
 
 
 class TokenResponse(Schema):

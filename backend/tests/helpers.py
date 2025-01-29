@@ -1,7 +1,11 @@
+from datetime import timedelta
+
 import sqlalchemy as sa
+from flask_jwt_extended import create_access_token, create_refresh_token
 
 from src.api import db
 from src.api.models.user import User
+from src.api.variables import JWT_ACCESS_EXPIRY, JWT_REFRESH_EXPIRY
 
 
 def getshape(d):
@@ -25,10 +29,16 @@ def get_user_tokens(fresh=True):
     user = db.session.scalars(
         sa.Select(User).where(User.username.ilike("test"))
     ).first()
+    fresh_timeout = False  # makes tokens always unfresh
+    if fresh:
+        fresh_timeout = timedelta(minutes=10)
     if not user:
         return
-    tokens = user.generate_tokens(fresh)
-    return {"access": tokens["access_token"], "refresh": tokens["refresh_token"]}
+    access_token = create_access_token(
+        user.json(), expires_delta=JWT_ACCESS_EXPIRY, fresh=fresh_timeout
+    )
+    refresh_token = create_refresh_token(user.json(), expires_delta=JWT_REFRESH_EXPIRY)
+    return {"access": access_token, "refresh": refresh_token}
 
 
 def get_headers(token):

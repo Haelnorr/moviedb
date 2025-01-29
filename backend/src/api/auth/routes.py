@@ -1,4 +1,5 @@
 import os
+import time
 from datetime import timedelta
 
 import redis
@@ -118,7 +119,9 @@ class CheckCurrentUser(MethodView):
     @blp.response(status_code=200, schema=UserDetails)
     @blp.alt_response(401, schema=error_handler.ErrorSchema)
     def get(self):
-        return current_user.json()
+        fresh = get_jwt()["fresh"]
+        is_fresh = fresh > int(time.time())
+        return current_user.json(fresh=is_fresh)
 
 
 @blp.route("/refresh")

@@ -1,5 +1,3 @@
-import pytest
-
 from src.api.auth.functions import get_user
 from src.api.models.user import User
 from tests.helpers import get_headers, get_user_tokens
