@@ -79,11 +79,22 @@
   pointer-events: none;
   transition: all 0.5s ease-out;
 }
-.disabled {
+.nodisplay {
   display: none;
 }
 .textarea-char-count {
   display: none;
+}
+.resultmessage {
+  color: var(--green);
+  text-align: center;
+}
+.resultbad {
+  color: var(--red);
+}
+.waitingindicator {
+  margin-top: 15px;
+  margin-left: 20px;
 }
 @media (min-width: 768px) {
   .account-nav-panel {
@@ -138,5 +149,10 @@
     width: auto;
     margin-top: 5px;
     margin-bottom: 10px;
+  }
+  .resultmessage {
+    margin-left: 5px;
+    color: var(--green);
+    text-align: left;
   }
 }

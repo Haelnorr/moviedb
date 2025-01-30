@@ -84,6 +84,29 @@ export async function apiPost(
   return response;
 }
 
+export async function apiPut(
+  endpoint: string,
+  input: Record<string, unknown> = {},
+  token: string | undefined = undefined,
+): Promise<any> {
+  const requestURL = apiURI + endpoint;
+  var response;
+  if (token) {
+    response = await axios
+      .put(requestURL, input, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .catch((err) => handleError(err));
+  } else {
+    response = await axios
+      .put(requestURL, input)
+      .catch((err) => handleError(err));
+  }
+  return response;
+}
+
 export async function apiGet(
   endpoint: string,
   accessToken: string | undefined = undefined,

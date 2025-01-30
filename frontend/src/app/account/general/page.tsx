@@ -50,10 +50,7 @@ const AccountGeneral = () => {
                 <div
                   className={`col-md-8 ${styles["account-settings-content"]}`}
                 >
-                  <BioUpdateForm
-                    currentBio={user!.bio}
-                    onChanged={mutateAuth}
-                  />
+                  <BioUpdateForm />
                 </div>
               </div>
             </div>

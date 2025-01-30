@@ -1,19 +1,26 @@
+"use client";
 import AccountNavPanel from "../ui/components/account/accountNavPanel";
+import useAuthenticatedUser from "../util/api/userSWR";
 
 const AccountLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
+  const { user, loading } = useAuthenticatedUser();
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-3">
-          <AccountNavPanel />
+    <>
+      {user && !loading && (
+        <div className="container">
+          <div className="row">
+            <div className="col-md-3">
+              <AccountNavPanel />
+            </div>
+            <div className="col-md-9">{children}</div>
+          </div>
         </div>
-        <div className="col-md-9">{children}</div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

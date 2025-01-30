@@ -33,7 +33,11 @@ export async function getTokenFromCookies(): Promise<{
 }
 
 export async function handleFailedAuth(error: string) {
-  log.debug({ error: error }, "Error occured authorizing the user");
-  await deleteCookie("access_token", { cookies });
-  await deleteCookie("refresh_token", { cookies });
+  if (error === "Unauthorized") {
+    log.debug({ error: error }, "Error occured authorizing the user");
+    await deleteCookie("access_token", { cookies });
+    await deleteCookie("refresh_token", { cookies });
+  } else {
+    log.debug({ error: error }, "Error occured making the request");
+  }
 }

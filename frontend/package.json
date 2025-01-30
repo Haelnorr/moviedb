@@ -18,6 +18,7 @@
     "pino-pretty": "^13.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-spinners": "^0.15.0",
     "sass": "1.77.6",
     "swr": "^2.3.0"
   },

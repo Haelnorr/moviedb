@@ -1,25 +1,48 @@
+"use client";
 import { useState } from "react";
 import styles from "./styles.module.css";
 import clsx from "clsx";
+import updateBio from "@/app/util/api/updatebio";
+import useAuthenticatedUser from "@/app/util/api/userSWR";
+import { RotatingLines } from "react-loader-spinner";
+import { RingLoader, SyncLoader } from "react-spinners";
 
-const BioUpdateForm = (props: { currentBio: string; onChanged: Function }) => {
+const BioUpdateForm = () => {
+  const { user, loading, mutateAuth } = useAuthenticatedUser();
+  if (loading) {
+    return <>Loading...</>;
+  }
   const [changed, setChanged] = useState(false);
-  const [newBio, setNewBio] = useState(props.currentBio || "");
+  const [newBio, setNewBio] = useState(user!.bio || "");
+  const [awaiting, setAwaiting] = useState(false);
+  const [result, setResult] = useState("");
+
   function handleInput(value: string) {
     if (value.length <= 128) {
       setNewBio(value);
       setChanged(true);
+      setResult("");
     }
   }
   function resetInput() {
-    setNewBio(props.currentBio || "");
+    setNewBio(user!.bio || "");
     setChanged(false);
   }
-  function handleSave() {
+  async function handleSave() {
     if (changed) {
-      // TODO: handle saving of the users new bio to the server
-      // hide the buttons and show a spinny wheel
-      // when data updated, show success message that fades out slowly
+      setAwaiting(true);
+      const { error } = await updateBio(newBio).then((resp) => {
+        return resp;
+      });
+      setAwaiting(false);
+      if (error) {
+        console.warn(`Failed to update bio: ${error}`);
+        setResult("An error occured");
+      } else {
+        setResult("Bio updated!");
+        mutateAuth();
+        setChanged(false);
+      }
     }
   }
   return (
@@ -35,11 +58,30 @@ const BioUpdateForm = (props: { currentBio: string; onChanged: Function }) => {
           className={styles["textarea-char-count"]}
         >{`${newBio.length}/128`}</span>
       </div>
-      <div className={styles.buttonwrapper}>
+      <div
+        className={clsx(styles.resultmessage, {
+          [styles.nodisplay]: !result,
+          [styles.resultbad]: result.includes("error"),
+        })}
+      >
+        {result}
+      </div>
+      <div
+        className={clsx(styles.waitingindicator, {
+          [styles.nodisplay]: !awaiting,
+        })}
+      >
+        <SyncLoader size={8} margin={5} color="#cba6f7" />
+      </div>
+      <div
+        className={clsx(styles.buttonwrapper, {
+          [styles.nodisplay]: awaiting,
+        })}
+      >
         <button
           type="button"
           className={clsx(`btn btn-primary ${styles["focus-only-button"]}`, {
-            [styles["hidden"]]: !changed,
+            [styles.hidden]: !changed,
           })}
           onClick={handleSave}
         >
@@ -48,7 +90,7 @@ const BioUpdateForm = (props: { currentBio: string; onChanged: Function }) => {
         <button
           type="button"
           className={clsx(`btn btn-secondary ${styles["focus-only-button"]}`, {
-            [styles["hidden"]]: !changed,
+            [styles.hidden]: !changed,
           })}
           onClick={resetInput}
         >
