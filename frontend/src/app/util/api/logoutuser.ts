@@ -8,10 +8,10 @@ import { apiErrorAsValue } from "./errors";
 import { logger } from "@/lib/logger";
 const log = logger.child({ file: "util/api/logoutuser.ts" });
 
-export const logoutUser = async (): Promise<{
+export default async function logoutUser(): Promise<{
   revokeAccessError: string | undefined;
   revokeRefreshError: string | undefined;
-}> => {
+}> {
   var revokeAccessError;
   var revokeRefreshError;
   const accessToken = await getCookie("access_token", { cookies });
@@ -51,4 +51,4 @@ export const logoutUser = async (): Promise<{
   }
 
   return { revokeAccessError, revokeRefreshError };
-};
+}

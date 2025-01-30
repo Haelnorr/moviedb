@@ -1,6 +1,6 @@
 "use client";
 import styles from "@/components/auth/styles.module.css";
-import { loginUser } from "@/app/util/api/loginuser";
+import loginUser from "@/app/util/api/loginuser";
 import { useLoginFormContext } from "@/contexts/loginform";
 import clsx from "clsx";
 import FormSubmit from "./SubmitButton";

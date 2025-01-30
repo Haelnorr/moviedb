@@ -17,7 +17,7 @@ function reconstructURL(
   return url;
 }
 
-export function loginRedirectPath(
+export default function loginRedirectPath(
   page: "login" | "register",
   pathname: string,
   searchParams: ReadonlyURLSearchParams,

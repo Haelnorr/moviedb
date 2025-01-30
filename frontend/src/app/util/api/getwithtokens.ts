@@ -3,15 +3,15 @@ import { apiGet } from "@/util/api/requests";
 import { deleteCookie, getCookie } from "cookies-next";
 import { apiErrorAsValue } from "@/util/api/errors";
 import { cookies } from "next/headers";
-import { refreshTokens } from "@/util/api/refreshtokens";
+import refreshTokens from "@/util/api/refreshtokens";
 import { logger } from "@/lib/logger";
 const log = logger.child({ file: "util/api/getwithtokens.ts" });
 
 // Make an get request to the backend api with the user tokens
 // automatically performs refresh token check and updates tokens if valid
-export const apiGetWithTokens = async (
+export default async function apiGetWithTokens(
   endpoint: string,
-): Promise<{ response: any; error: string | undefined }> => {
+): Promise<{ response: any; error: string | undefined }> {
   var error;
   log.debug("Getting user access cookie");
   var accessToken = await getCookie("access_token", { cookies });
@@ -59,4 +59,4 @@ export const apiGetWithTokens = async (
     await deleteCookie("refresh_token", { cookies });
   }
   return { response: response, error: error };
-};
+}

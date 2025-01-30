@@ -1,7 +1,7 @@
 "use client";
 import useSWR, { KeyedMutator } from "swr";
 import { User } from "@/util/types";
-import { apiGetWithTokens } from "@/util/api/getwithtokens";
+import apiGetWithTokens from "@/util/api/getwithtokens";
 
 type AuthenticatedUserSWR = {
   user: User | undefined;

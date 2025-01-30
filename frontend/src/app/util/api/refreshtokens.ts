@@ -7,7 +7,9 @@ import { cookies } from "next/headers";
 import { logger } from "@/lib/logger";
 const log = logger.child({ file: "util/api/refreshtokens.ts" });
 
-export async function refreshTokens(refreshToken: CookieValueTypes): Promise<{
+export default async function refreshTokens(
+  refreshToken: CookieValueTypes,
+): Promise<{
   refreshError: string | undefined;
 }> {
   var refreshError;

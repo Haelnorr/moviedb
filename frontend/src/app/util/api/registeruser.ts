@@ -5,11 +5,11 @@ import { apiPost } from "./requests";
 import { logger } from "@/lib/logger";
 const log = logger.child({ file: "util/api/registeruser.ts" });
 
-export const registerUser = async (
+export default async function registerUser(
   username: string,
   password: string,
   confirmPassword: string,
-): Promise<{ registered: boolean; error: string | undefined }> => {
+): Promise<{ registered: boolean; error: string | undefined }> {
   var error;
   log.debug({ username: username }, "Attempting to register new user");
   const registered = await apiPost("auth/register", {
@@ -38,4 +38,4 @@ export const registerUser = async (
       }
     });
   return { registered, error };
-};
+}

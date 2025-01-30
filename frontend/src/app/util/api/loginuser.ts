@@ -8,7 +8,7 @@ import { cookies } from "next/headers";
 import { logger } from "@/lib/logger";
 const log = logger.child({ file: "util/api/loginuser.ts" });
 
-export async function loginUser(
+export default async function loginUser(
   username: string,
   password: string,
 ): Promise<{ login: boolean; error: string | undefined }> {
