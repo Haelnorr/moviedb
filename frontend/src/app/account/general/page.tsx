@@ -1,7 +1,7 @@
 "use client";
 import BioUpdateForm from "@/app/ui/components/account/bioUpdateForm";
 import UsernameUpdateForm from "@/app/ui/components/account/usernameUpdateForm";
-import { loginRedirectPath } from "@/app/util/api/loginredirect";
+import loginRedirectPath from "@/app/util/api/loginredirect";
 import useAuthenticatedUser from "@/app/util/api/userSWR";
 import styles from "@/components/account/styles.module.css";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";

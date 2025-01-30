@@ -33,7 +33,7 @@ export default function useAuthenticatedUser(): AuthenticatedUserSWR {
           break;
       }
     } else {
-      user = data!.response;
+      user = data!.response.user;
       if (user!.fresh === "True") isFresh = true;
     }
   }

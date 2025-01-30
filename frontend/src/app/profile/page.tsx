@@ -3,7 +3,7 @@ import styles from "@/components/profile/styles.module.css";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useAuthenticatedUser from "@/util/api/userSWR";
 import { useEffect } from "react";
-import { loginRedirectPath } from "@/util/api/loginredirect";
+import loginRedirectPath from "@/util/api/loginredirect";
 import ProfileHeader from "@/components/profile/profileHeader";
 import ProfileByline from "@/components/profile/profileByline";
 import ProfileFavourites from "@/components/profile/profileFavourites";

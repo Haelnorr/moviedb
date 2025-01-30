@@ -101,12 +101,14 @@ def test_check_current_user_logout(app, client):
         if not user:
             assert False
         expected_response = {
-            "id": 1,
-            "username": "test",
-            "bio": "This is a bio",
-            "joined": "2025-01-15T11:45:00",
-            "role": "admin",
-            "fresh": "True",
+            "user": {
+                "id": 1,
+                "username": "test",
+                "bio": "This is a bio",
+                "joined": "2025-01-15T11:45:00",
+                "role": "admin",
+                "fresh": "True",
+            }
         }
         assert response.json == expected_response
 

@@ -1,4 +1,4 @@
-import { loginRedirectPath } from "@/util/api/loginredirect";
+import loginRedirectPath from "@/util/api/loginredirect";
 import Link from "next/link";
 import styles from "./styles.module.css";
 import { usePathname, useSearchParams } from "next/navigation";

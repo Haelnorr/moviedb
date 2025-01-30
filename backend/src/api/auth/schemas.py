@@ -18,13 +18,16 @@ class CheckUserExistsParams(Schema):
     username = fields.Str(required=True)
 
 
-class UserDetails(Schema):
-    id = fields.Int()
-    username = fields.Str()
-    bio = fields.Str()
-    joined = fields.DateTime()
-    role = fields.Str()
-    fresh = fields.Str(required=False)
+class UserDetailsResponse(Schema):
+    class User(Schema):
+        id = fields.Int()
+        username = fields.Str()
+        bio = fields.Str()
+        joined = fields.DateTime()
+        role = fields.Str()
+        fresh = fields.Str(required=False)
+
+    user = fields.Nested(User)
 
 
 class TokenResponse(Schema):

@@ -1,7 +1,7 @@
 import useAuthenticatedUser from "@/app/util/api/userSWR";
 import styles from "./styles.module.css";
 import { usePathname } from "next/navigation";
-import { logoutUser } from "@/app/util/api/logoutuser";
+import logoutUser from "@/app/util/api/logoutuser";
 import UserProfile from "./navuserprofile";
 import { LoginButton, RegisterButton } from "./navbuttons";
 const UserTile = () => {

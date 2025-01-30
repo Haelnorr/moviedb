@@ -1,11 +1,11 @@
 import styles from "@/components/auth/styles.module.css";
 import FormButtonContainer from "./FormButtonContainer";
 import { useRegisterFormContext } from "@/contexts/registerform";
-import { loginUser } from "@/app/util/api/loginuser";
+import loginUser from "@/app/util/api/loginuser";
 import clsx from "clsx";
 import FormSubmit from "./SubmitButton";
-import { checkUsernameExists } from "@/app/util/api/checkusernameexists";
-import { registerUser } from "@/app/util/api/registeruser";
+import checkUsernameExists from "@/app/util/api/checkusernameexists";
+import registerUser from "@/app/util/api/registeruser";
 import FormButton from "./LinkButton";
 
 const FormUsername = () => {

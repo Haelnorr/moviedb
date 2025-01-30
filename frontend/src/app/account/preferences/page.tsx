@@ -1,5 +1,5 @@
 "use client";
-import { loginRedirectPath } from "@/app/util/api/loginredirect";
+import loginRedirectPath from "@/app/util/api/loginredirect";
 import useAuthenticatedUser from "@/app/util/api/userSWR";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";

@@ -19,7 +19,7 @@ from src.api.auth.schemas import (
     LoginUserParams,
     RegisterUserParams,
     TokenResponse,
-    UserDetails,
+    UserDetailsResponse,
     UserExists,
 )
 from src.api.variables import (
@@ -125,13 +125,13 @@ class Login(MethodView):
 class CheckCurrentUser(MethodView):
     @blp.doc(**JWT_AUTH_REQ)
     @jwt_required()
-    @blp.response(status_code=200, schema=UserDetails)
+    @blp.response(status_code=200, schema=UserDetailsResponse)
     @blp.alt_response(401, schema=error_handler.ErrorSchema)
     def get(self):
         fresh = get_jwt()["fresh"]
         is_fresh = fresh > int(time.time())
         log.debug(f"Providing authenticated user details for {current_user.username}")
-        return current_user.json(fresh=is_fresh)
+        return {"user": current_user.json(fresh=is_fresh)}
 
 
 @blp.route("/refresh")
