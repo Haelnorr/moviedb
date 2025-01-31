@@ -10,9 +10,8 @@ services:
     env_file:
       .envfiles/.backend
     environment:
-      - LOG_DIR=/var/log/backend
+      - LOG_DIR=/data/logs/backend
       - FLASK_APP=src/run.py
-      - DATABASE=/data/data.sqlite
     depends_on:
       - redis
     volumes:
@@ -20,15 +19,20 @@ services:
       - ./backend/migrations/versions:/backend/migrations/versions
       - ./data:/data
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   redis:
     image: redis:latest
     container_name: mdb-redis
-    command: ["redis-server", "--appendonly", "yes", "--appendfilename", "appendonly.aof", "--appendfsync", "everysec"]
+    command: [
+      "redis-server",
+      "--appendonly", "yes",
+      "--appendfilename", "appendonly.aof",
+      "--appendfsync", "everysec",
+      "--port", "6380"]
     volumes:
       - ./data:/data
     ports:
-      - "6379:6379"
+      - "6380:6380"
     restart: unless-stopped
-
-

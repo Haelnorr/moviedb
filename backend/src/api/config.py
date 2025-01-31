@@ -28,7 +28,7 @@ base_db_url = f"postgresql://{postgres_user}:{postgres_pass}@{postgres_host}/(da
 if postgres_endpoint_id:  # pragma: no cover
     base_db_url = base_db_url + f"&options=endpoint%3D{postgres_endpoint_id}"
 
-DATABASE_NAME = "moviedb"
+DATABASE_NAME = os.getenv("POSTGRES_DB_NAME", "default")
 moviedb_url = base_db_url.replace("(database)", DATABASE_NAME)
 
 logsafe_url = f"postgresql://[username]:[password]@{postgres_host}/(database)?sslmode={postgres_ssl_mode}"
@@ -39,7 +39,7 @@ log.debug("(Username and password have been obscured for security)")
 
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY")
-    API_TITLE = "MovieDB API"
+    API_TITLE = f"MovieDB API"
     API_VERSION = "v1"
     API_SPEC_OPTIONS = {
         "components": {

@@ -21,7 +21,7 @@ COPY ./compose/flask/start /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
 
-RUN mkdir /var/log/backend
-RUN chmod o+rw -R /var/log/backend
+RUN mkdir -p /data/logs/backend
+RUN chmod o+rw -R /data/logs/backend
 
 ENTRYPOINT [ "/entrypoint" ]

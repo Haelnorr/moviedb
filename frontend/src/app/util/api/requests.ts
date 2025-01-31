@@ -14,7 +14,9 @@ import {
   UnprocessableContent,
 } from "@/util/api/errors";
 
-const apiURI = process.env.API_URL;
+const apiHost = process.env.API_URL;
+const apiPort = process.env.API_PORT;
+const apiURI = `${apiHost}:${apiPort}/`;
 
 function handleError(err: AxiosError) {
   if (err) {

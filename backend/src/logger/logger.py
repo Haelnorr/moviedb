@@ -12,7 +12,9 @@ path = os.path.dirname(os.path.abspath(__file__))
 # Go up to project root
 for _ in range(3):
     path = Path(path).parent.absolute()
-DEFAULT_LOG_DIR = os.path.join(path, "logs")
+DEFAULT_LOG_DIR = os.path.join(path, "devlogs")
+if not os.path.exists(DEFAULT_LOG_DIR):
+    os.makedirs(DEFAULT_LOG_DIR)
 
 
 def get_level(level):
@@ -29,7 +31,7 @@ def get_level(level):
 
 class LogConfig:
     log_dir = os.getenv("LOG_DIR", DEFAULT_LOG_DIR)
-    file_name = "backend-{:%%Y-%%m-%%d}.log"
+    file_name = "backend-{:%Y-%m-%d}.log"
     level = get_level(os.getenv("LOG_LEVEL", "info"))
     format = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
