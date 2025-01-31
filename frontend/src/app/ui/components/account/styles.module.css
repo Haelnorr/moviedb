@@ -53,6 +53,10 @@
   margin-right: auto;
   background-color: var(--mantle);
 }
+.verticalspacerslim {
+  height: 5px;
+  width: 5px;
+}
 .textarea-container {
   width: fit-content;
   margin-left: auto;

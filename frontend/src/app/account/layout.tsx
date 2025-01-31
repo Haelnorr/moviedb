@@ -1,6 +1,9 @@
 "use client";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import AccountNavPanel from "../ui/components/account/accountNavPanel";
 import useAuthenticatedUser from "../util/api/userSWR";
+import { useEffect } from "react";
+import loginRedirectPath from "../util/api/loginredirect";
 
 const AccountLayout = ({
   children,
@@ -8,6 +11,15 @@ const AccountLayout = ({
   children: React.ReactNode;
 }>) => {
   const { user, loading } = useAuthenticatedUser();
+  const router = useRouter();
+  const loggedOut = !user && !loading;
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    if (loggedOut) {
+      router.push(loginRedirectPath("login", pathname, searchParams));
+    }
+  }, [user, loggedOut, router, pathname, searchParams]);
   return (
     <>
       {user && !loading && (

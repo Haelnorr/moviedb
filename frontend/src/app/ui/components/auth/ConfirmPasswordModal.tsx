@@ -89,7 +89,7 @@ const confirmPasswordModal = (props: {
               className={"btn btn-primary"}
               onClick={handleSubmit}
             >
-              Success
+              Confirm
             </button>
             <button
               type="button"

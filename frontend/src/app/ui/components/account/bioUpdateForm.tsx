@@ -33,7 +33,7 @@ const BioUpdateForm = () => {
       const { error } = await updateBio(newBio);
       setAwaiting(false);
       if (error) {
-        console.warn(`Failed to update bio: ${error}`);
+        console.warn(`Error updating bio: ${error}`);
         setResult("An error occured");
       } else {
         setResult("Bio updated!");

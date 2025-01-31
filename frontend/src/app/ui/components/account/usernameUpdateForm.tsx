@@ -52,6 +52,7 @@ const UsernameUpdateForm = () => {
     setChanged(false);
     setValid(false);
     setChecked(false);
+    setResult("");
   }
   async function handleCheckUpdate(override = false) {
     if (changed && !valid) {
@@ -91,7 +92,7 @@ const UsernameUpdateForm = () => {
       setAwaiting(true);
       const { error } = await updateUsername(newUsername);
       if (error) {
-        console.warn(`Failed to update bio: ${error}`);
+        console.warn(`Error updating username: ${error}`);
         setResult("An error occured");
       } else {
         setResult("Username updated!");
