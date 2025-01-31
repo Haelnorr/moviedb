@@ -1,52 +1,152 @@
+"use client";
 import { useState } from "react";
 import styles from "./styles.module.css";
 import clsx from "clsx";
+import useAuthenticatedUser from "@/app/util/api/userSWR";
+import ConfirmPasswordModal from "@/components/auth/ConfirmPasswordModal";
+import ConfirmUsernameChangeModal from "../auth/ConfirmUsernameChangeModal";
+import checkUsernameExists from "@/app/util/api/checkusernameexists";
+import { SyncLoader } from "react-spinners";
+import updateUsername from "@/app/util/api/updateusername";
 
-const UsernameUpdateForm = (props: {
-  currentUsername: string;
-  onChanged: Function;
-  isFresh: boolean;
-}) => {
+const UsernameUpdateForm = () => {
+  const { user, loading, mutateAuth, isFresh } = useAuthenticatedUser();
+  if (loading) {
+    return <>Loading...</>;
+  }
+  const [newUsername, setNewUsername] = useState(user!.username);
   const [changed, setChanged] = useState(false);
   const [valid, setValid] = useState(false);
-  const [newUsername, setNewUsername] = useState(props.currentUsername);
-  const [loading, setLoading] = useState(false);
+  const [checked, setChecked] = useState(false);
+  const [awaiting, setAwaiting] = useState(false);
+  const [result, setResult] = useState("");
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showConfirmUsernameChange, setShowConfirmUsernameChange] =
+    useState(false);
+
   function handleInput(value: string) {
+    if (value === user!.username) {
+      setChanged(false);
+    } else {
+      setChanged(true);
+    }
     setNewUsername(value);
-    setChanged(true);
     setValid(false);
+    setChecked(false);
+    setResult("");
   }
+
+  function validateInput(target: HTMLInputElement) {
+    const validFormat = new RegExp("^[A-Za-z0-9_-]*$");
+    const valid = validFormat.test(target.value);
+    if (!valid) {
+      target.value = newUsername;
+      setChecked(true);
+    } else {
+      handleInput(target.value);
+    }
+  }
+
   function resetInput() {
-    setNewUsername(props.currentUsername);
+    setNewUsername(user!.username);
     setChanged(false);
     setValid(false);
+    setChecked(false);
   }
-  function handleCheckUpdate() {
+  async function handleCheckUpdate(override = false) {
     if (changed && !valid) {
-      // TODO: do username check, hide buttons and show loading wheel
-      // when search is done, either show validation error, or change
-      // valid to true
-      setValid(true);
+      setAwaiting(true);
+      await checkUsername();
+      setAwaiting(false);
     } else if (changed && valid) {
-      if (!props.isFresh) {
-        // TODO: prompt user to confirm password
-        console.log("token not fresh");
+      if (!isFresh && !override) {
+        setShowConfirmPassword(true);
       } else {
-        // TODO: prompt user to confirm with warning
-        // TODO: update server with new username
+        setShowConfirmUsernameChange(true);
       }
     }
   }
+  async function checkUsername() {
+    const { exists, error } = await checkUsernameExists(newUsername);
+    if (error) {
+      setResult("An error occured checking your username.");
+    } else if (exists) {
+      setResult("Username is taken.");
+    } else if (!error && !exists) {
+      setValid(true);
+      setResult("Username is available!");
+    }
+    setChecked(true);
+  }
+  const confirmPasswordCallback = (success: boolean) => {
+    setShowConfirmPassword(false);
+    mutateAuth();
+    if (success) {
+      handleCheckUpdate(true);
+    }
+  };
+  const confirmUsernameChangeCallback = async (success: boolean) => {
+    setShowConfirmUsernameChange(false);
+    if (success) {
+      setAwaiting(true);
+      const { error } = await updateUsername(newUsername);
+      if (error) {
+        console.warn(`Failed to update bio: ${error}`);
+        setResult("An error occured");
+      } else {
+        setResult("Username updated!");
+        mutateAuth();
+        setChanged(false);
+        setChecked(false);
+        setValid(false);
+      }
+      setAwaiting(false);
+    }
+  };
   return (
     <>
+      <ConfirmPasswordModal
+        isOpen={showConfirmPassword}
+        callback={confirmPasswordCallback}
+      />
+      <ConfirmUsernameChangeModal
+        isOpen={showConfirmUsernameChange}
+        callback={confirmUsernameChangeCallback}
+      />
       <input
         type="text"
-        className={`form-control ${styles["text-input"]}`}
+        className={clsx(`form-control ${styles["text-input"]}`, {
+          "is-valid": checked && valid,
+          "is-invalid": checked && !valid,
+        })}
         value={newUsername}
-        onChange={(e) => handleInput(e.target.value)}
+        onChange={(e) => validateInput(e.target)}
         maxLength={64}
       />
-      <div className={styles.buttonwrapper}>
+      <div
+        className={clsx(styles.resultmessage, {
+          [styles.nodisplay]: !result,
+          [styles.resultbad]:
+            result.includes("error") || result.includes("taken"),
+          [styles.resultgood]: !(
+            result.includes("error") || result.includes("taken")
+          ),
+        })}
+      >
+        {result}
+      </div>
+      <div
+        className={clsx(styles.waitingindicator, {
+          [styles.nodisplay]: !awaiting,
+        })}
+      >
+        <SyncLoader size={8} margin={5} color="#cba6f7" />
+      </div>
+      <div
+        className={clsx(styles.buttonwrapper, {
+          [styles.nodisplay]: awaiting,
+        })}
+      >
         <button
           type="button"
           className={clsx(`btn ${styles["focus-only-button"]}`, {
@@ -54,7 +154,7 @@ const UsernameUpdateForm = (props: {
             "btn-warning": changed && !valid,
             "btn-primary": changed && valid,
           })}
-          onClick={handleCheckUpdate}
+          onClick={() => handleCheckUpdate()}
         >
           {!valid && "Check"}
           {changed && valid && "Update"}

@@ -21,7 +21,7 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang="en" data-bs-theme="dark">
-      <body className={`${techmono.className} antialiased`}>
+      <body id="root" className={`${techmono.className} antialiased`}>
         <TopNav />
         <div className="content">{children}</div>
       </body>

@@ -4,8 +4,7 @@ import styles from "./styles.module.css";
 import clsx from "clsx";
 import updateBio from "@/app/util/api/updatebio";
 import useAuthenticatedUser from "@/app/util/api/userSWR";
-import { RotatingLines } from "react-loader-spinner";
-import { RingLoader, SyncLoader } from "react-spinners";
+import { SyncLoader } from "react-spinners";
 
 const BioUpdateForm = () => {
   const { user, loading, mutateAuth } = useAuthenticatedUser();
@@ -31,9 +30,7 @@ const BioUpdateForm = () => {
   async function handleSave() {
     if (changed) {
       setAwaiting(true);
-      const { error } = await updateBio(newBio).then((resp) => {
-        return resp;
-      });
+      const { error } = await updateBio(newBio);
       setAwaiting(false);
       if (error) {
         console.warn(`Failed to update bio: ${error}`);
@@ -62,6 +59,7 @@ const BioUpdateForm = () => {
         className={clsx(styles.resultmessage, {
           [styles.nodisplay]: !result,
           [styles.resultbad]: result.includes("error"),
+          [styles.resultgood]: !result.includes("error"),
         })}
       >
         {result}

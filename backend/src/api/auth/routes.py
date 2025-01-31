@@ -35,8 +35,6 @@ log = get_logger(__name__)
 
 blp = Blueprint("auth", "auth", url_prefix="/auth", description="Auth API")
 
-# NOTE: if REDIS envar not set, defaults to 'redis' as assumed to be
-# running inside docker compose with redis dependency
 redis_url = os.getenv("REDIS", "redis")
 redis_port = int(os.getenv("REDIS_PORT", 6379))
 redis_db = int(os.getenv("JWT_REDIS_INDEX", 0))

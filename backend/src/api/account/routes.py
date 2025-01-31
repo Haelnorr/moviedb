@@ -1,5 +1,3 @@
-from time import sleep
-
 from flask_jwt_extended import current_user, jwt_required
 from flask_smorest import Blueprint, abort, error_handler
 from flask_smorest.blueprint import MethodView

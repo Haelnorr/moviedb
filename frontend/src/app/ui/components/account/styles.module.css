@@ -85,14 +85,17 @@
 .textarea-char-count {
   display: none;
 }
-.resultmessage {
-  color: var(--green);
-  text-align: center;
-}
 .resultbad {
   color: var(--red);
 }
+.resultgood {
+  color: var(--green);
+}
+.resultmessage {
+  text-align: center;
+}
 .waitingindicator {
+  height: 38px;
   margin-top: 15px;
   margin-left: 20px;
 }
@@ -152,7 +155,6 @@
   }
   .resultmessage {
     margin-left: 5px;
-    color: var(--green);
     text-align: left;
   }
 }
