@@ -7,7 +7,7 @@ const profileLinks = [
   { label: "Settings", href: "/account" },
 ];
 
-const UserProfile = (props: { user: User; onLogout: Function }) => {
+const UserProfile = (props: { user: User; onLogout: () => void }) => {
   return (
     <div className={`dropdown`}>
       <a

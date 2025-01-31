@@ -3,6 +3,7 @@ import "@/app/globals.css";
 import { techmono } from "@/app/ui/fonts";
 import TopNav from "@/components/nav/topnav";
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "MovieDB",
@@ -22,8 +23,10 @@ const RootLayout = ({
   return (
     <html lang="en" data-bs-theme="dark">
       <body id="root" className={`${techmono.className} antialiased`}>
-        <TopNav />
-        <div className="content">{children}</div>
+        <Suspense>
+          <TopNav />
+          <div className="content">{children}</div>
+        </Suspense>
       </body>
     </html>
   );

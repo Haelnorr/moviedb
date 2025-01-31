@@ -6,9 +6,9 @@ import FormButtonContainer from "./FormButtonContainer";
 import useAuthenticatedUser from "@/app/util/api/userSWR";
 import loginUser from "@/app/util/api/loginuser";
 
-const confirmPasswordModal = (props: {
+const ConfirmPasswordModal = (props: {
   isOpen: boolean;
-  callback: Function;
+  callback: (success: boolean) => void;
 }) => {
   Modal.setAppElement("#root");
 
@@ -105,4 +105,4 @@ const confirmPasswordModal = (props: {
   );
 };
 
-export default confirmPasswordModal;
+export default ConfirmPasswordModal;

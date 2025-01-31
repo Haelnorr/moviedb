@@ -20,7 +20,7 @@ const LoginPage = () => {
     if (loggedIn) {
       router.push(returnTo);
     }
-  }, [user, loggedIn, router]);
+  }, [loggedIn, router, returnTo]);
 
   return (
     <div className="container">

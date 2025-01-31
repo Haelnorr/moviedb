@@ -1,5 +1,5 @@
 import styles from "@/components/auth/styles.module.css";
-const FormSubmit = (props: { label: string; onClick: Function }) => {
+const FormSubmit = (props: { label: string; onClick: () => void }) => {
   return (
     <button
       type="button"

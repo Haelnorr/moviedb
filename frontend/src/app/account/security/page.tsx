@@ -1,10 +1,11 @@
 "use client";
 import PasswordUpdateForm from "@/app/ui/components/account/passwordUpdateForm";
 import styles from "@/components/account/styles.module.css";
+import { Suspense } from "react";
 
 const AccountSecurity = () => {
   return (
-    <>
+    <Suspense>
       <div className={styles["account-content-wrapper"]}>
         <span className={styles["account-content-title"]}>Security</span>
         <div className={`container ${styles["account-content-container"]}`}>
@@ -18,7 +19,7 @@ const AccountSecurity = () => {
           </div>
         </div>
       </div>
-    </>
+    </Suspense>
   );
 };
 export default AccountSecurity;

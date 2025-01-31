@@ -2,7 +2,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import AccountNavPanel from "../ui/components/account/accountNavPanel";
 import useAuthenticatedUser from "../util/api/userSWR";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import loginRedirectPath from "../util/api/loginredirect";
 
 const AccountLayout = ({
@@ -19,9 +19,9 @@ const AccountLayout = ({
     if (loggedOut) {
       router.push(loginRedirectPath("login", pathname, searchParams));
     }
-  }, [user, loggedOut, router, pathname, searchParams]);
+  }, [loggedOut, router, pathname, searchParams]);
   return (
-    <>
+    <Suspense>
       {user && !loading && (
         <div className="container">
           <div className="row">
@@ -32,7 +32,7 @@ const AccountLayout = ({
           </div>
         </div>
       )}
-    </>
+    </Suspense>
   );
 };
 

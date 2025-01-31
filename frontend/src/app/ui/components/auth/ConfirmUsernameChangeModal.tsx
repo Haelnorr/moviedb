@@ -2,9 +2,9 @@ import Modal from "react-modal";
 import styles from "./styles.module.css";
 import FormButtonContainer from "./FormButtonContainer";
 
-const confirmPasswordModal = (props: {
+const ConfirmUsernameChangeModal = (props: {
   isOpen: boolean;
-  callback: Function;
+  callback: (success: boolean) => void;
 }) => {
   Modal.setAppElement("#root");
 
@@ -47,4 +47,4 @@ const confirmPasswordModal = (props: {
   );
 };
 
-export default confirmPasswordModal;
+export default ConfirmUsernameChangeModal;

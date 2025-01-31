@@ -1,6 +1,5 @@
-import { User } from "@/app/util/types";
 import styles from "./styles.module.css";
-const ProfileActivity = (props: { user: User }) => {
+const ProfileActivity = () => {
   // TODO: query user activity from backend using user as input query
 
   const activity = [

@@ -13,11 +13,11 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 COPY ./backend .
 
-COPY ./compose/flask/entrypoint /entrypoint
+COPY ./compose/backend/entrypoint /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
 
-COPY ./compose/flask/start /start
+COPY ./compose/backend/start /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
 

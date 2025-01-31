@@ -20,7 +20,7 @@ const ProfilePage = () => {
     if (loggedOut) {
       router.push(loginRedirectPath("login", pathname, searchParams));
     }
-  }, [user, loggedOut, router]);
+  }, [user, loggedOut, router, pathname, searchParams]);
   return (
     <>
       {!loggedOut && !loading && (
@@ -33,10 +33,10 @@ const ProfilePage = () => {
           </div>
           <div className="row">
             <div className="col-md-4">
-              <ProfileFavourites user={user!} />
+              <ProfileFavourites />
             </div>
             <div className="col-md-8">
-              <ProfileActivity user={user!} />
+              <ProfileActivity />
             </div>
           </div>
         </div>

@@ -6,7 +6,7 @@ import clsx from "clsx";
 import FormSubmit from "./SubmitButton";
 import FormButtonContainer from "./FormButtonContainer";
 import FormButton from "./LinkButton";
-const FormUsername = (props: { onKeyDown: Function }) => {
+const FormUsername = (props: { onKeyDown: (key: string) => void }) => {
   const {
     setUsername,
     errorCredentials,
@@ -47,7 +47,7 @@ const FormUsername = (props: { onKeyDown: Function }) => {
   );
 };
 
-const FormPassword = (props: { onKeyDown: Function }) => {
+const FormPassword = (props: { onKeyDown: (key: string) => void }) => {
   const { setPassword, errorCredentials, setErrorCredentials, errorMessage } =
     useLoginFormContext();
   function updateValue(value: string) {
@@ -85,7 +85,7 @@ const FormPassword = (props: { onKeyDown: Function }) => {
   );
 };
 
-const LoginForm = (props: { onLogin: Function }) => {
+const LoginForm = (props: { onLogin: () => void }) => {
   const context = useLoginFormContext();
 
   async function handleSubmit() {

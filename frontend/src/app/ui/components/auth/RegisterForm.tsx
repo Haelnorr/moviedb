@@ -89,7 +89,7 @@ const FormPassword = () => {
   );
 };
 
-const FormConfirmPassword = (props: { onKeyDown: Function }) => {
+const FormConfirmPassword = (props: { onKeyDown: (key: string) => void }) => {
   const {
     setConfirmPassword,
     errorPasswords,
@@ -131,7 +131,7 @@ const FormConfirmPassword = (props: { onKeyDown: Function }) => {
   );
 };
 
-const RegisterForm = (props: { onLogin: Function }) => {
+const RegisterForm = (props: { onLogin: () => void }) => {
   const context = useRegisterFormContext();
 
   async function handleSubmit() {

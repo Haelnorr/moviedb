@@ -1,9 +1,10 @@
 "use client";
 import styles from "@/components/account/styles.module.css";
+import { Suspense } from "react";
 
 const AccountPreferences = () => {
   return (
-    <>
+    <Suspense>
       <div className={styles["account-content-wrapper"]}>
         <span className={styles["account-content-title"]}>Preferences</span>
         <div className={`container ${styles["account-content-container"]}`}>
@@ -17,7 +18,7 @@ const AccountPreferences = () => {
           </div>
         </div>
       </div>
-    </>
+    </Suspense>
   );
 };
 export default AccountPreferences;

@@ -11,9 +11,6 @@ import updateUsername from "@/app/util/api/updateusername";
 
 const UsernameUpdateForm = () => {
   const { user, loading, mutateAuth, isFresh } = useAuthenticatedUser();
-  if (loading) {
-    return <>Loading...</>;
-  }
   const [newUsername, setNewUsername] = useState(user!.username);
   const [changed, setChanged] = useState(false);
   const [valid, setValid] = useState(false);
@@ -23,6 +20,10 @@ const UsernameUpdateForm = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showConfirmUsernameChange, setShowConfirmUsernameChange] =
     useState(false);
+
+  if (loading) {
+    return <>Loading...</>;
+  }
 
   function handleInput(value: string) {
     if (value === user!.username) {

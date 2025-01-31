@@ -1,6 +1,5 @@
-import { User } from "@/app/util/types";
 import styles from "./styles.module.css";
-const ProfileFavourites = (props: { user: User }) => {
+const ProfileFavourites = () => {
   // TODO: get favourites from backend using user as input query
   const favourites = [
     "Arrival",

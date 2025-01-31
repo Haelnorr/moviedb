@@ -1,8 +1,8 @@
 services:
-  flask:
+  backend:
     build:
       context: .
-      dockerfile: ./compose/flask/Dockerfile
+      dockerfile: ./compose/backend/Dockerfile
     container_name: mdb-flask
     command: /start
     ports:
@@ -21,6 +21,27 @@ services:
     restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:host-gateway"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./compose/frontend/Dockerfile
+    container_name: mdb-nextjs
+    ports:
+      - 4000:4000
+    env_file:
+      .envfiles/.frontend
+    environment:
+      - API_URL=http://host.docker.internal
+      - API_PORT=8000
+    depends_on:
+      - backend
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
 
   redis:
     image: redis:latest

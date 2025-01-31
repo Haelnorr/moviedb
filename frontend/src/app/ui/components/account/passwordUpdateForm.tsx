@@ -9,14 +9,15 @@ import updatePassword from "@/app/util/api/updatepassword";
 
 const PasswordUpdateForm = () => {
   const { loading, mutateAuth, isFresh } = useAuthenticatedUser();
-  if (loading) {
-    return <>Loading...</>;
-  }
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [awaiting, setAwaiting] = useState(false);
   const [result, setResult] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  if (loading) {
+    return <>Loading...</>;
+  }
 
   function updatePasswordValue(value: string) {
     setResult("");

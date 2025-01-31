@@ -8,13 +8,14 @@ import { SyncLoader } from "react-spinners";
 
 const BioUpdateForm = () => {
   const { user, loading, mutateAuth } = useAuthenticatedUser();
-  if (loading) {
-    return <>Loading...</>;
-  }
   const [changed, setChanged] = useState(false);
   const [newBio, setNewBio] = useState(user!.bio || "");
   const [awaiting, setAwaiting] = useState(false);
   const [result, setResult] = useState("");
+
+  if (loading) {
+    return <>Loading...</>;
+  }
 
   function handleInput(value: string) {
     if (value.length <= 128) {
