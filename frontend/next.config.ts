@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   serverExternalPackages: ["pino", "pino-pretty"],
   output: "standalone",
+  experimental: { reactCompiler: true },
 };
 
 export default nextConfig;
