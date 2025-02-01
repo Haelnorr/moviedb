@@ -11,8 +11,8 @@ const AccountLayout = ({
   children: React.ReactNode;
 }>) => {
   const { user, loading } = useAuthenticatedUser();
-  const router = useRouter();
   const loggedOut = !user && !loading;
+  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   useEffect(() => {

@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import styles from "@/components/nav/styles.module.css";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import NavList from "./navlist";
 import NavSearch from "./search";
 import UserTile from "./usertile";
@@ -13,7 +13,7 @@ const TopNav = () => {
   }, []);
   return (
     <>
-      <nav className={`navbar navbar-expand-lg ${styles.navbar}`}>
+      <nav id={styles.navbar} className="navbar navbar-expand-lg">
         <div className="container-md">
           <Link className={`navbar-brand ${styles.navbrand}`} href="/">
             MovieDB
@@ -22,7 +22,9 @@ const TopNav = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <NavList />
             <NavSearch />
-            <UserTile />
+            <Suspense>
+              <UserTile />
+            </Suspense>
           </div>
         </div>
       </nav>

@@ -1,37 +1,37 @@
-.navbar {
+#navbar {
   background-color: var(--crust);
 }
 
-.navbrand {
+#navbar .navbrand {
   font-size: 1.7em;
 }
 
-.navlink {
+#navbar .navlink {
   font-size: 1.4em;
   margin-right: 10px;
 }
 
-.navbrand,
-.navlink {
+#navbar .navbrand,
+#navbar .navlink {
   color: var(--text);
   padding-inline: 20px;
   transition: all 0.35s ease-out;
   text-decoration: none;
 }
 
-.navbrand:hover,
-.navlink:hover {
+#navbar .navbrand:hover,
+#navbar .navlink:hover {
   color: var(--green);
   transition: all 0.35s ease-in;
 }
 
-.usertile {
+#navbar .usertile {
   margin-left: 0px;
 }
 
-.profiledropdown,
-.userlogin,
-.userlogout {
+#navbar .profiledropdown,
+#navbar .userlogin,
+#navbar .userlogout {
   display: block;
   margin-top: 15px;
   max-width: 200px;
@@ -39,34 +39,33 @@
   margin-right: auto;
 }
 
-.profiledropdown {
+#navbar .profiledropdown {
   text-decoration: none;
-  color: var(--sapphire);
   transition: all 0.35s ease-in;
 }
 
-.profiledropdown:hover {
+#navbar .profiledropdown:hover {
   color: var(--crust);
 }
 
 @media (min-width: 992px) {
-  .usertile {
+  #navbar .usertile {
     margin-left: 15px;
   }
-  .profiledropdown {
+  #navbar .profiledropdown {
     display: inline-block;
     margin-right: 5px;
     margin-top: 0px;
   }
-  .userlogin,
-  .userlogout {
+  #navbar .userlogin,
+  #navbar .userlogout {
     margin-top: 0px;
   }
-  .authbuttons > *:first-child {
+  #navbar .authbuttons > *:first-child {
     margin-left: 0px;
   }
 
-  .authbuttons > * {
+  #navbar .authbuttons > * {
     margin-left: 10px;
   }
 }

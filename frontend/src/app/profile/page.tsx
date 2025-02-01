@@ -2,7 +2,7 @@
 import styles from "@/components/profile/styles.module.css";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useAuthenticatedUser from "@/util/api/userSWR";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import loginRedirectPath from "@/util/api/loginredirect";
 import ProfileHeader from "@/components/profile/profileHeader";
 import ProfileByline from "@/components/profile/profileByline";
@@ -22,7 +22,7 @@ const ProfilePage = () => {
     }
   }, [user, loggedOut, router, pathname, searchParams]);
   return (
-    <>
+    <Suspense>
       {!loggedOut && !loading && (
         <div className="container">
           <div className="row">
@@ -41,7 +41,7 @@ const ProfilePage = () => {
           </div>
         </div>
       )}
-    </>
+    </Suspense>
   );
 };
 export default ProfilePage;

@@ -13,7 +13,7 @@ path = os.path.dirname(os.path.abspath(__file__))
 for _ in range(3):
     path = Path(path).parent.absolute()
 DEFAULT_LOG_DIR = os.path.join(path, "devlogs")
-if not os.path.exists(DEFAULT_LOG_DIR):
+if not os.path.exists(DEFAULT_LOG_DIR) and not os.getenv("LOG_DIR"):
     os.makedirs(DEFAULT_LOG_DIR)
 
 

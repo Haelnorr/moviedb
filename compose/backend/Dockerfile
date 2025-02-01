@@ -11,17 +11,23 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=backend/requirements.txt,target=requirements.txt \
     python -m pip install -r requirements.txt
 
+RUN addgroup --system --gid 1001 flask
+RUN adduser --system --uid 1001 flaskapp
+
 COPY ./backend .
 
-COPY ./compose/backend/entrypoint /entrypoint
+COPY --chown=flaskapp:flask ./compose/backend/entrypoint /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
 
-COPY ./compose/backend/start /start
+COPY --chown=flaskapp:flask ./compose/backend/start /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
 
-RUN mkdir -p /data/logs/backend
-RUN chmod o+rw -R /data/logs/backend
+RUN mkdir /data
+RUN chown -R flaskapp:flask /data
+RUN chmod -R u+rw /data
+
+USER flaskapp
 
 ENTRYPOINT [ "/entrypoint" ]

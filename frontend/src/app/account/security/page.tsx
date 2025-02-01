@@ -1,25 +1,22 @@
 "use client";
 import PasswordUpdateForm from "@/app/ui/components/account/passwordUpdateForm";
 import styles from "@/components/account/styles.module.css";
-import { Suspense } from "react";
 
 const AccountSecurity = () => {
   return (
-    <Suspense>
-      <div className={styles["account-content-wrapper"]}>
-        <span className={styles["account-content-title"]}>Security</span>
-        <div className={`container ${styles["account-content-container"]}`}>
-          <div className="row">
-            <div className={`col-md-2 ${styles["account-settings-labels"]}`}>
-              Change Password
-            </div>
-            <div className={`col-md-8 ${styles["account-settings-content"]}`}>
-              <PasswordUpdateForm />
-            </div>
+    <div className={styles["account-content-wrapper"]}>
+      <span className={styles["account-content-title"]}>Security</span>
+      <div className={`container ${styles["account-content-container"]}`}>
+        <div className="row">
+          <div className={`col-md-2 ${styles["account-settings-labels"]}`}>
+            Change Password
+          </div>
+          <div className={`col-md-8 ${styles["account-settings-content"]}`}>
+            <PasswordUpdateForm />
           </div>
         </div>
       </div>
-    </Suspense>
+    </div>
   );
 };
 export default AccountSecurity;

@@ -4,7 +4,7 @@ import { techmono } from "@/app/ui/fonts";
 import TopNav from "@/components/nav/topnav";
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
-
+import Script from "next/script";
 export const metadata: Metadata = {
   title: "MovieDB",
   description: "Movie reviews, suggestions and more - by Haelnorr",
@@ -20,13 +20,23 @@ const RootLayout = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
+  const nodeEnv = process.env.NODE_ENV;
+
   return (
     <html lang="en" data-bs-theme="dark">
+      <head>
+        {nodeEnv != "production" && (
+          <Script
+            crossOrigin="anonymous"
+            src="https://unpkg.com/react-scan/dist/auto.global.js"
+          />
+        )}
+      </head>
       <body id="root" className={`${techmono.className} antialiased`}>
-        <Suspense>
-          <TopNav />
-          <div className="content">{children}</div>
-        </Suspense>
+        <TopNav />
+        <div className="content">
+          <Suspense>{children}</Suspense>
+        </div>
       </body>
     </html>
   );

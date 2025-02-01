@@ -1,0 +1,6 @@
+#!/bin/bash
+mkdir -p data/backend/logs
+chown -R 1001:1001 data/backend
+mkdir -p data/frontend/logs
+chown -R 1002:1002 data/frontend
+docker compose create --build
