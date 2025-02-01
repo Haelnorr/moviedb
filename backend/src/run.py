@@ -16,9 +16,17 @@ import sqlalchemy.orm as so
 
 from src.api import db
 from src.api.auth import functions as af
-from src.api.models import User
+from src.api.models import Permission, Role, User
 
 
 @app.shell_context_processor
 def make_shell_context():
-    return {"sa": sa, "so": so, "db": db, "User": User, "af": af}
+    return {
+        "sa": sa,
+        "so": so,
+        "db": db,
+        "af": af,
+        "User": User,
+        "Role": Role,
+        "Permission": Permission,
+    }

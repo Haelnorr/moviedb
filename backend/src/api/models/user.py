@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, List
 
 import sqlalchemy as sa
 import sqlalchemy.orm as so
@@ -7,6 +7,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from src.api import db
+from src.api.models.user_role import user_role
 from src.api.variables import JWT_ACCESS_EXPIRY, JWT_REFRESH_EXPIRY
 
 if TYPE_CHECKING:
@@ -21,8 +22,9 @@ class User(db.Model):
     joined: so.Mapped[datetime] = so.mapped_column(
         index=True, default=lambda: datetime.now(timezone.utc)
     )
-    role_id: so.Mapped[int | None] = so.mapped_column(sa.ForeignKey("role.id"))
-    role: so.Mapped[Optional["Role"]] = so.relationship(back_populates="users")
+    roles: so.Mapped[List["Role"]] = so.relationship(
+        secondary=user_role, back_populates="users"
+    )
 
     def __repr__(self):
         return f"<User {self.username}>"
@@ -57,6 +59,6 @@ class User(db.Model):
             "username": self.username,
             "bio": self.bio,
             "joined": self.joined,
-            "role": self.role.name if self.role else "",
+            "roles": [role.name for role in self.roles],
             "fresh": fresh,
         }

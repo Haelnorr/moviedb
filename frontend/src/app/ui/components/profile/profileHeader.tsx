@@ -6,7 +6,7 @@ const ProfileHeader = (props: { user: User }) => {
   return (
     <div className="col">
       <span className={styles["profile-name"]}>{props.user.username}</span>
-      <ProfileRoleTag role={props.user.role} />
+      <ProfileRoleTag roles={props.user.roles} />
       <span className={styles["profile-joined"]}>
         Joined {formatTimestampDateOnly(props.user.joined)}
       </span>

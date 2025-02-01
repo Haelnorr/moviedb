@@ -9,7 +9,7 @@ export type User = {
   id: number;
   username: string;
   joined: string;
-  role: string;
+  roles: string[];
   bio: string;
   favourites: any[];
   activity: any[];

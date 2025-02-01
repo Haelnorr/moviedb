@@ -4,6 +4,7 @@ import sqlalchemy as sa
 
 from src.api import db
 from src.api.models import User
+from src.api.models.role import Role
 from src.api.variables import USERNAME_REGEX_PATTERN
 from src.logger import get_logger
 
@@ -37,7 +38,20 @@ def get_user(username=None, id=None):
         query = sa.select(User).where(User.id == id)
     else:
         return
-    log.debug(f"Quering database for user with username {username} or id {id}")
+    log.debug(f"Querying database for user with username {username} or id {id}")
     user = db.session.scalars(query).first()
     log.debug(f"Query for {username} or {id} complete")
     return user
+
+
+def get_role(name):
+    log.debug(f"Querying database for role with name {name}")
+    query = sa.select(Role).where(Role.name.ilike(name))
+    role = db.session.scalars(query).first()
+    log.debug(f"Query for {name} complete")
+    return role
+
+
+def list_roles():
+    query = sa.select(Role)
+    return db.session.scalars(query).all()

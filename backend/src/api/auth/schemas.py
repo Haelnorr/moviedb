@@ -24,7 +24,7 @@ class UserDetailsResponse(Schema):
         username = fields.Str()
         bio = fields.Str()
         joined = fields.DateTime()
-        role = fields.Str()
+        roles = fields.List(fields.Str())
         fresh = fields.Str(required=False)
 
     user = fields.Nested(User)

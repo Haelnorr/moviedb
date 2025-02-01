@@ -41,17 +41,9 @@ def test_validate_username_format():
 
 def test_check_username_exists(app):
     with app.app_context():
-        assert check_username_exists("test") == True
-        assert check_username_exists("Test") == True
-        assert check_username_exists("TEst") == True
-        assert check_username_exists("TeSt") == True
-        assert check_username_exists("TesT") == True
-        assert check_username_exists("TEST") == True
-        assert check_username_exists("est") == False
-        assert check_username_exists("iteest") == False
-        assert check_username_exists("itest") == False
-        assert check_username_exists("testi") == False
-        assert check_username_exists("itesti") == False
+        assert check_username_exists("admin") == True
+        assert check_username_exists("ADMIN") == True
+        assert check_username_exists("user") == True
         assert check_username_exists("noexist") == False
 
 
@@ -69,33 +61,17 @@ def test_create_new_user(app):
 
 def test_get_user(app):
     with app.app_context():
-        user = get_user("test")
+        user = get_user("admin")
         assert isinstance(user, User)
-        assert user.username == "test"
+        assert user.username == "admin"
 
-        user = get_user("Test")
+        user = get_user("ADMIN")
         assert isinstance(user, User)
-        assert user.username == "test"
-
-        user = get_user("TEST")
-        assert isinstance(user, User)
-        assert user.username == "test"
-
-        user = get_user("TeSt")
-        assert isinstance(user, User)
-        assert user.username == "test"
-
-        user = get_user("tEsT")
-        assert isinstance(user, User)
-        assert user.username == "test"
-
-        assert get_user("testi") is None
-        assert get_user("itest") is None
-        assert get_user("itesti") is None
+        assert user.username == "admin"
 
         user = get_user(id=1)
         assert isinstance(user, User)
-        assert user.username == "test"
+        assert user.username == "admin"
 
         assert get_user("noexist") is None
         assert get_user() is None

@@ -27,7 +27,7 @@ def response_is_jwt(jwt):
 
 def get_user_tokens(fresh=True):
     user = db.session.scalars(
-        sa.Select(User).where(User.username.ilike("test"))
+        sa.Select(User).where(User.username.ilike("admin"))
     ).first()
     fresh_timeout = False  # makes tokens always unfresh
     if fresh:

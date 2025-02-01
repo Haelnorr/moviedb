@@ -47,9 +47,9 @@ def runner(app):
 
 
 @pytest.fixture
-def user():
+def admin():
     user = User()
-    user.username = "tester"
+    user.username = "admin"
     user.id = 1
     return user
 
@@ -57,3 +57,19 @@ def user():
 @pytest.fixture
 def password():
     return "test"
+
+
+@pytest.fixture
+def user():
+    user = User()
+    user.username = "user"
+    user.id = 2
+    return user
+
+
+@pytest.fixture
+def newuser():
+    user = User()
+    user.username = "newuser"
+    user.id = 3
+    return user

@@ -1,8 +1,9 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 from time import time
 
 from flask_jwt_extended import decode_token
 
+from src.api.auth.functions import get_user
 from src.api.variables import JWT_ACCESS_EXPIRY, JWT_REFRESH_EXPIRY
 from tests.helpers import response_is_jwt
 
@@ -63,6 +64,28 @@ def test_user_repr(user):
     assert f"{user}" == f"<User {user.username}>"
 
 
-# def test_user_json(user):
-#     expected = {"id": user.id, "username": user.username}
-#     assert user.json() == expected
+def test_user_json(app):
+    with app.app_context():
+        admin = get_user("admin")
+        user = get_user("user")
+        if not admin or not user:
+            assert False
+        expected = {
+            "id": 1,
+            "username": "admin",
+            "bio": "This is a bio",
+            "joined": datetime(2025, 1, 15, 11, 45),
+            "roles": ["admin", "user"],
+            "fresh": None,
+        }
+        assert admin.json() == expected
+
+        expected = {
+            "id": 2,
+            "username": "user",
+            "bio": "This is another bio",
+            "joined": datetime(2025, 1, 15, 11, 55),
+            "roles": ["user"],
+            "fresh": None,
+        }
+        assert user.json() == expected

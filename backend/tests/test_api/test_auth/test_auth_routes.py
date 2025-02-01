@@ -1,5 +1,3 @@
-import pytest
-
 from src.api.auth.functions import get_user
 from tests.helpers import get_headers, get_user_tokens, response_is_jwt
 
@@ -8,7 +6,7 @@ def test_login(app, client):
     with app.app_context():
         # Check user with valid credentials can login
         response = client.post(
-            "/auth/login", json={"username": "test", "password": "test"}
+            "/auth/login", json={"username": "admin", "password": "test"}
         )
         assert response.status_code == 200
         # make sure the response is properly formed
@@ -16,7 +14,7 @@ def test_login(app, client):
 
         # invalid credentials testing
         bad_response = client.post(
-            "/auth/login", json={"username": "test", "password": "asdsad"}
+            "/auth/login", json={"username": "admin", "password": "asdsad"}
         )
         assert bad_response.status_code == 401
         bad_response = client.post(
@@ -27,14 +25,14 @@ def test_login(app, client):
 
 def test_check_exists(app, client):
     with app.app_context():
-        response = client.post("/auth/exists", json={"username": "test"})
+        response = client.post("/auth/exists", json={"username": "admin"})
         assert response.json["exists"] == True
 
         response = client.post("/auth/exists", json={"username": "noexist"})
         assert response.json["exists"] == False
 
 
-def test_register(app, client, user, password):
+def test_register(app, client, newuser, password):
     with app.app_context():
         # check invalid username format
         response = client.post(
@@ -50,7 +48,7 @@ def test_register(app, client, user, password):
         response = client.post(
             "/auth/register",
             json={
-                "username": user.username,
+                "username": newuser.username,
                 "password": "noreallyits",
                 "confirm_password": "notthesamepassword",
             },
@@ -60,7 +58,7 @@ def test_register(app, client, user, password):
         response = client.post(
             "/auth/register",
             json={
-                "username": user.username,
+                "username": newuser.username,
                 "password": password,
                 "confirm_password": password,
             },
@@ -70,7 +68,7 @@ def test_register(app, client, user, password):
         response = client.post(
             "/auth/register",
             json={
-                "username": user.username,
+                "username": newuser.username,
                 "password": password,
                 "confirm_password": password,
             },
@@ -97,16 +95,16 @@ def test_check_current_user_logout(app, client):
 
         response = client.get("/auth/@me", headers=get_headers(tokens["access"]))
         assert response.status_code == 200
-        user = get_user("test")
+        user = get_user("admin")
         if not user:
             assert False
         expected_response = {
             "user": {
                 "id": 1,
-                "username": "test",
+                "username": "admin",
                 "bio": "This is a bio",
                 "joined": "2025-01-15T11:45:00",
-                "role": "admin",
+                "roles": ["admin", "user"],
                 "fresh": "True",
             }
         }

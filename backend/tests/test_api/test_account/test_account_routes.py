@@ -22,7 +22,7 @@ def test_change_username(app, client):
         assert response.status_code == 401
         # make sure user hasnt had their username changed
         assert get_user("newusername") is None
-        assert isinstance(get_user("test"), User)
+        assert isinstance(get_user("admin"), User)
 
         # test user with no token cant access route
         response = client.put(
@@ -32,7 +32,7 @@ def test_change_username(app, client):
         assert response.status_code == 401
         # make sure user hasnt had their username changed
         assert get_user("newusername") is None
-        assert isinstance(get_user("test"), User)
+        assert isinstance(get_user("admin"), User)
 
         # test user with invalid token cant access route
         response = client.put(
@@ -43,7 +43,7 @@ def test_change_username(app, client):
         assert response.status_code == 422
         # make sure user hasnt had their username changed
         assert get_user("newusername") is None
-        assert isinstance(get_user("test"), User)
+        assert isinstance(get_user("admin"), User)
 
         # test new username doesnt match valid format fails
         response = client.put(
@@ -54,7 +54,7 @@ def test_change_username(app, client):
         assert response.status_code == 400
         # make sure user hasnt had their username changed
         assert get_user("newusername") is None
-        assert isinstance(get_user("test"), User)
+        assert isinstance(get_user("admin"), User)
 
         # test new username too long fails
         long_username = "a" * 65
@@ -66,24 +66,24 @@ def test_change_username(app, client):
         assert response.status_code == 400
         # make sure user hasnt had their username changed
         assert get_user("newusername") is None
-        assert isinstance(get_user("test"), User)
+        assert isinstance(get_user("admin"), User)
 
         # test new username cant match existing user
         response = client.put(
             "/account/change_username",
             headers=fresh_headers,
-            json={"new_username": "user2"},
+            json={"new_username": "user"},
         )
         assert response.status_code == 409
         # make sure user hasnt had their username changed
         assert get_user("newusername") is None
-        assert isinstance(get_user("test"), User)
+        assert isinstance(get_user("admin"), User)
 
         # test new username cant be submitted unchanged
         response = client.put(
             "/account/change_username",
             headers=fresh_headers,
-            json={"new_username": "test"},
+            json={"new_username": "admin"},
         )
         assert response.status_code == 409
 
@@ -116,7 +116,7 @@ def test_change_password(app, client):
         )
         assert response.status_code == 401
         # make sure user hasnt had their password changed
-        user = get_user("test")
+        user = get_user("admin")
         if not user:
             assert False
         assert user.check_password("newpassword") == False
@@ -129,7 +129,7 @@ def test_change_password(app, client):
         )
         assert response.status_code == 401
         # make sure user hasnt had their password changed
-        user = get_user("test")
+        user = get_user("admin")
         if not user:
             assert False
         assert user.check_password("newpassword") == False
@@ -143,7 +143,7 @@ def test_change_password(app, client):
         )
         assert response.status_code == 422
         # make sure user hasnt had their password changed
-        user = get_user("test")
+        user = get_user("admin")
         if not user:
             assert False
         assert user.check_password("newpassword") == False
@@ -157,7 +157,7 @@ def test_change_password(app, client):
         )
         assert response.status_code == 400
         # make sure user hasnt had their password changed
-        user = get_user("test")
+        user = get_user("admin")
         if not user:
             assert False
         assert user.check_password("thesepasswords") == False
@@ -172,7 +172,7 @@ def test_change_password(app, client):
         )
         assert response.status_code == 200
         # make sure user hasnt had their password changed
-        user = get_user("test")
+        user = get_user("admin")
         if not user:
             assert False
         assert user.check_password("test") == False
@@ -187,7 +187,7 @@ def test_change_bio(app, client):
         headers = get_headers(tokens["access"])
         invalid_headers = get_headers("invalidtoken")
 
-        user = get_user("test")
+        user = get_user("admin")
         if not user:
             assert False
         new_bio = "Very new bio very different"
@@ -196,7 +196,7 @@ def test_change_bio(app, client):
         # test user with no token cant update bio
         response = client.put("/account/change_bio", json={"new_bio": new_bio})
         assert response.status_code == 401
-        user = get_user("test")
+        user = get_user("admin")
         if not user:
             assert False
         assert user.bio != new_bio
@@ -207,7 +207,7 @@ def test_change_bio(app, client):
             "/account/change_bio", headers=invalid_headers, json={"new_bio": new_bio}
         )
         assert response.status_code == 422
-        user = get_user("test")
+        user = get_user("admin")
         if not user:
             assert False
         assert user.bio != new_bio
@@ -219,7 +219,7 @@ def test_change_bio(app, client):
             "/account/change_bio", headers=headers, json={"new_bio": long_bio}
         )
         assert response.status_code == 400
-        user = get_user("test")
+        user = get_user("admin")
         if not user:
             assert False
         assert user.bio != new_bio
@@ -230,7 +230,7 @@ def test_change_bio(app, client):
             "/account/change_bio", headers=headers, json={"new_bio": new_bio}
         )
         assert response.status_code == 200
-        user = get_user("test")
+        user = get_user("admin")
         if not user:
             assert False
         assert user.bio != old_bio
